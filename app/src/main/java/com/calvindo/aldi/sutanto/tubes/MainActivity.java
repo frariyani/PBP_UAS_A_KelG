@@ -15,7 +15,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Fragment default_frag = new HomeFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
+                default_frag).commit();
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
         bottomNavigation.setOnNavigationItemSelectedListener(navListener);
     }
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    Fragment selected = null;
+                    Fragment selected = new HomeFragment();
 
                     switch (item.getItemId()){
                         case R.id.action_home:

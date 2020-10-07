@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <View
         android:id="@+id/top_view"
         android:layout_width="wrap_content"
-        android:layout_height="150dp"
+        android:layout_height="250dp"
         android:layout_weight="1"
         android:background="@color/colorPrimary" />
-
     <View
         android:id="@+id/view2"
         android:layout_width="wrap_content"
@@ -17,6 +19,22 @@
         android:layout_below="@+id/top_view"
         android:layout_weight="1"
         android:background="@drawable/ic_wave" />
+    <LinearLayout
+        android:layout_marginTop="130dp"
+        android:padding="30dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_kost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/cardview">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/textView"
@@ -39,14 +57,5 @@
         android:text="Gahar Mantap Bauwangi"
         android:textColor="#fff"
         android:textSize="20dp" />
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30sp"
-        android:layout_marginTop="260dp"
-        android:fontFamily="sans-serif-condensed"
-        android:text="Wazzap"
-        android:textColor="#000"
-        android:textSize="40dp" />
+
 </RelativeLayout>

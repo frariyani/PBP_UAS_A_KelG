@@ -6,22 +6,15 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Fragment default_frag = new HomeFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
-                default_frag).commit();
-        BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
-        bottomNavigation.setOnNavigationItemSelectedListener(navListener);
-    }
 
+    //Inisialisasi variabel navListener pada saat menu di click
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -29,27 +22,39 @@ public class MainActivity extends AppCompatActivity {
                     Fragment selected = new HomeFragment();
 
                     switch (item.getItemId()){
+                        //memilih homeFragment
                         case R.id.action_home:
                             selected = new HomeFragment();
                             break;
+                        //memilih favFragment
                         case R.id.action_fav:
                             selected = new FavoriteFragment();
                             break;
+                        //memilih profilFragment
                         case R.id.action_profile:
                             selected = new ProfileFragment();
                             break;
                     }
+                    //mengubah fragment sesuai fragment yang di pilih
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
                             selected).commit();
                     return true;
                 }
             };
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        super.onCreateOptionsMenu(menu);
-//        getMenuInflater().inflate(R.menu.menu, menu);
-//
-//        return true;
-//    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        //set default layout dengan homeFragment
+        Fragment default_frag = new HomeFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
+                default_frag).commit();
+
+        //memanggil fungsi bottom navigation ke dalam layout
+        BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
+        bottomNavigation.setOnNavigationItemSelectedListener(navListener);
+    }
+
 }

@@ -13,7 +13,7 @@ public class DatabaseClient {
 
     private DatabaseClient(Context context){
         this.context = context;
-        database = Room.databaseBuilder(context, AppDatabase.class, "favorites").build();
+        database = Room.databaseBuilder(context, AppDatabase.class, "kost").build();
     }
 
     public static synchronized DatabaseClient getInstance(Context context){

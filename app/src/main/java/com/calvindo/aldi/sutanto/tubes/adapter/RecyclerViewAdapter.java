@@ -64,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     class MyViewHolder extends RecyclerView.ViewHolder{
         String nama,kota,alamat,latitude,longitude,hp,image;
-        int status;
+        int status, id;
         double cost;
         CardviewBinding cardviewBinding;
 
@@ -77,37 +77,39 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG,"onClick: " + mData.get(getAdapterPosition()) );
-                    nama = mData.get(getAdapterPosition()).getName();
-                    kota = mData.get(getAdapterPosition()).getKota();
-                    alamat = mData.get(getAdapterPosition()).getAlamat();
-                    latitude = mData.get(getAdapterPosition()).getLatitude();
-                    longitude = mData.get(getAdapterPosition()).getLongitude();
-                    hp = mData.get(getAdapterPosition()).getHPOwner();
-                    image = mData.get(getAdapterPosition()).getImage();
-                    cost = mData.get(getAdapterPosition()).getCost();
-                    status = mData.get(getAdapterPosition()).getStatus();
 
-                    addFav();
-                    Toast toast = Toast.makeText(view.getContext(), "Item has been added to Favorites!", Toast.LENGTH_SHORT);
-                    toast.show();
+                    id = mData.get(getAdapterPosition()).getId();
+
+                    if (mData.get(getAdapterPosition()).getStatus() == 0){
+                        mData.get(getAdapterPosition()).setStatus(1);
+                        status = mData.get(getAdapterPosition()).getStatus();
+                        update(id,1);
+                        Toast toast = Toast.makeText(view.getContext(), "Successfully added to favorite", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }else {
+                        mData.get(getAdapterPosition()).setStatus(0);
+                        status = mData.get(getAdapterPosition()).getStatus();
+                        update(id,0);
+                        Toast toast = Toast.makeText(view.getContext(), "Successfully removed to favorite", Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
                 }
             });
         }
-        public void addFav(){
-            class AddFav extends AsyncTask<Void,Void,Void>{
+
+        public void update(final int id, final int status){
+            new Thread(new Runnable() {
                 @Override
-                protected Void doInBackground(Void... voids) {
-                    Favorites favorites = new Favorites(
-                            nama,kota,alamat,latitude,longitude,hp,cost,image,status);
+                public void run() {
+                    Kost kost = DatabaseClient.getInstance(mContext)
+                            .getDatabase().kostDAO().findkostbyid(id);
+
+                    kost.setStatus(status);
 
                     DatabaseClient.getInstance(mContext).getDatabase()
-                            .favDAO().insert(favorites);
-                    return null;
+                            .kostDAO().update(kost);
                 }
-            }
-
-            AddFav add = new AddFav();
-            add.execute();
+            }).start();
         }
     }
 }

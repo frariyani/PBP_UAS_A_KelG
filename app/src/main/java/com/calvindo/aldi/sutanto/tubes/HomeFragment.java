@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
+import com.calvindo.aldi.sutanto.tubes.adapter.FavoriteAdapter;
 import com.calvindo.aldi.sutanto.tubes.adapter.RecyclerViewAdapter;
 import com.calvindo.aldi.sutanto.tubes.databinding.FragmentHomeBinding;
 import com.calvindo.aldi.sutanto.tubes.models.Favorites;
@@ -46,6 +48,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
     private List<Kost> ListKost;
     private RecyclerView myRecyclerView;
+    private RecyclerViewAdapter adapter;
     FragmentHomeBinding fragmentHomeBinding;
     private Button button_map;
     private SharedPreferences preferences;
@@ -92,7 +95,21 @@ public class HomeFragment extends Fragment {
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
                         "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
                         3000000.00 , "https://pbs.twimg.com/media/EjuOjU5VkAAETkt?format=jpg&name=900x900",0));
+
     }
+
+    public void initKost(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseClient
+                        .getInstance(getContext()).getDatabase()
+                        .kostDAO().insertList(ListKost);
+            }
+        }).start();
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -100,16 +117,34 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         FragmentHomeBinding fragmentHomeBinding = FragmentHomeBinding.inflate(getLayoutInflater());
         myRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_kost);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(),ListKost);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        myRecyclerView.setAdapter(recyclerViewAdapter);
+        getKost();
         return v;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void getKost(){
+        class GetKost extends AsyncTask<Void,Void,List<Kost>>{
+
+            @Override
+            protected List<Kost> doInBackground(Void... voids) {
+                List<Kost> kosts = DatabaseClient
+                        .getInstance(getContext())
+                        .getDatabase().kostDAO().getAll();
+                return kosts;
+            }
+            @Override
+            protected void onPostExecute(List<Kost> kost) {
+                super.onPostExecute(kost);
+                adapter = new RecyclerViewAdapter(getContext(), kost);
+                myRecyclerView.setAdapter(adapter);
+                if (kost.isEmpty()){
+                    initKost();
+                    Toast.makeText(getContext(), "Empty List" + kost, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+        GetKost get = new GetKost();
+        get.execute();
     }
-
-
 }

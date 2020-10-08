@@ -24,5 +24,4 @@ public interface FavDAO {
 
     @Delete
     void delete(Favorites favorites);
-
 }

@@ -2,20 +2,45 @@ package com.calvindo.aldi.sutanto.tubes.models;
 
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.bumptech.glide.Glide;
 
+@Entity(tableName = "kost")
 public class Kost {
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    public int id;
 
-    private String name;
+    @ColumnInfo(name = "name")
+    public String name;
+
+    @ColumnInfo(name = "kota")
     private String kota;
+
+    @ColumnInfo(name = "alamat")
     private String alamat;
+
+    @ColumnInfo(name = "latitude")
     private String latitude;
+
+    @ColumnInfo(name = "longitude")
     private String longitude;
+
+    @ColumnInfo(name = "HPOwner")
     private String HPOwner;
+
+    @ColumnInfo(name = "cost")
     private Double cost;
+
+    @ColumnInfo(name = "image")
     private String image;
+
+    @ColumnInfo(name = "status")
     private int status;
 
     public Kost(String name, String kota, String alamat, String latitude, String longitude, String HPOwner, Double cost, String image, int status) {
@@ -28,6 +53,14 @@ public class Kost {
         this.cost = cost;
         this.image = image;
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

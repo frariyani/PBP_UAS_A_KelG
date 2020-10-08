@@ -70,37 +70,30 @@ public class FavoriteFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-//        ListFav = new ArrayList<>();
-//        ListFav.add(new Favorites("Kost Premium", "Gombong",
-//                "Jl. Potongan", "-7.607468", "109.515752", "082112134121",
-//                2000000.00 , "https://pbs.twimg.com/media/EjuODzyVkAAaMNT?format=jpg&name=large", 0));
-//        ListFav = new ArrayList<>();
-//        ListFav.a
-//        getFavorite();
     }
 
-    private void getFavorite(){
-        class GetFavorite extends AsyncTask<Void,Void,List<Favorites>>{
+    public void getKost(){
+        class GetKost extends AsyncTask<Void,Void,List<Kost>>{
 
             @Override
-            protected List<Favorites> doInBackground(Void... voids) {
-                List<Favorites> favorites = DatabaseClient
-                        .getInstance(getContext()).getDatabase()
-                        .favDAO().getAll();
-                return favorites;
+            protected List<Kost> doInBackground(Void... voids) {
+                List<Kost> kosts = DatabaseClient
+                        .getInstance(getContext())
+                        .getDatabase().kostDAO().getAllFav();
+                return kosts;
             }
             @Override
-            protected void onPostExecute(List<Favorites> favorites) {
-                super.onPostExecute(favorites);
-                adapter = new FavoriteAdapter(getContext(), favorites);
+            protected void onPostExecute(List<Kost> kosts) {
+                super.onPostExecute(kosts);
+                adapter = new FavoriteAdapter(getContext(), kosts);
                 myRecyclerView.setAdapter(adapter);
-                if (favorites.isEmpty()){
-                    Toast.makeText(getContext(), "Empty List", Toast.LENGTH_SHORT).show();
+                if (kosts.isEmpty()){
+                    Toast.makeText(getContext(), "Empty List " + kosts, Toast.LENGTH_SHORT).show();
                 }
             }
         }
 
-        GetFavorite get = new GetFavorite();
+        GetKost get = new GetKost();
         get.execute();
     }
 
@@ -112,7 +105,7 @@ public class FavoriteFragment extends Fragment {
         FragmentFavoriteBinding fragmentFavoriteBinding = FragmentFavoriteBinding.inflate(getLayoutInflater());
         myRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_fav);
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        getFavorite();
+        getKost();
         return v;
     }
 }

@@ -1,124 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ProfileFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:id="@+id/top_view"
-        android:orientation="vertical"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="user"
+            type="com.calvindo.aldi.sutanto.tubes.models.User"/>
+    </data>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@color/colorPrimary">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView"
+
+        <!-- TODO: Update blank fragment layout -->
+        <LinearLayout
+            android:id="@+id/top_view"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_marginTop="30dp"
-            android:layout_height="150dp"
-            android:src="@drawable/aubrey_profile_rounded_" />
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="250dp"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_height="150dp"
+                bind:loadDrawable="@{user.avatar}"/>
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/top_view"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center"
+                android:text="@{user.nama}"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                android:textSize="30dp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
             android:layout_below="@+id/top_view"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center"
-            android:text="Calvindo Aldi Sutanto"
-            android:textStyle="bold"
-            android:textColor="#fff"
-            android:textSize="30dp" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/view2"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_below="@+id/top_view"
-        android:layout_weight="1"
-        android:background="@drawable/ic_wave" />
+            android:layout_weight="1"
+            android:background="@drawable/ic_wave" />
 
 
-    <LinearLayout
-        android:layout_width="360dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/view2"
-        android:layout_marginTop="30dp">
         <LinearLayout
-            android:paddingLeft="70dp"
-            android:layout_marginBottom="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_baseline_account_circle_24"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ryune"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:paddingLeft="70dp"
-            android:layout_width="match_parent"
+            android:layout_width="360dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_baseline_email_24"/>
-            <TextView
-                android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/view2"
+            android:layout_marginTop="30dp">
+            <LinearLayout
+                android:paddingLeft="70dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_baseline_account_circle_24"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{user.username}"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:paddingLeft="70dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="kororo276@gmail.com"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:paddingLeft="70dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_baseline_phone_iphone_24"/>
-            <TextView
-                android:layout_width="wrap_content"
+                android:layout_marginBottom="10dp">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_baseline_email_24"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{user.email}"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:paddingLeft="70dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="082112134121"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:paddingLeft="70dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_baseline_location_on_24"/>
-            <TextView
-                android:layout_width="wrap_content"
+                android:layout_marginBottom="10dp">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_baseline_phone_iphone_24"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{user.notelp}"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:paddingLeft="70dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Gombong, Jl. Potongan no 47"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginBottom="10dp">
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_baseline_location_on_24"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{user.alamat}"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</RelativeLayout>
+    </RelativeLayout>
+
+</layout>

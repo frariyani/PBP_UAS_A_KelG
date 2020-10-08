@@ -4,15 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SharedPreferences preferences;
+    public static final int mode = Activity.MODE_PRIVATE;
 
     //Inisialisasi variabel navListener pada saat menu di click
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -56,5 +62,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
         bottomNavigation.setOnNavigationItemSelectedListener(navListener);
     }
+
 
 }

@@ -2,23 +2,51 @@ package com.calvindo.aldi.sutanto.tubes.models;
 
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.bumptech.glide.Glide;
 
-public class Kost {
+import java.io.Serializable;
 
-    private String name;
+
+@Entity(tableName = "favorites")
+public class Favorites implements Serializable {
+    @NonNull
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
+    @ColumnInfo(name = "name")
+    public String name;
+
+    @ColumnInfo(name = "kota")
     private String kota;
+
+    @ColumnInfo(name = "alamat")
     private String alamat;
+
+    @ColumnInfo(name = "latitude")
     private String latitude;
+
+    @ColumnInfo(name = "longitude")
     private String longitude;
+
+    @ColumnInfo(name = "HPOwner")
     private String HPOwner;
+
+    @ColumnInfo(name = "cost")
     private Double cost;
+
+    @ColumnInfo(name = "image")
     private String image;
+
+    @ColumnInfo(name = "status")
     private int status;
 
-    public Kost(String name, String kota, String alamat, String latitude, String longitude, String HPOwner, Double cost, String image, int status) {
+    public Favorites(String name, String kota, String alamat, String latitude, String longitude, String HPOwner, Double cost, String image, int status) {
         this.name = name;
         this.kota = kota;
         this.alamat = alamat;

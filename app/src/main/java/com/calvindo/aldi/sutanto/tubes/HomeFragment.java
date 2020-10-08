@@ -1,5 +1,8 @@
 package com.calvindo.aldi.sutanto.tubes;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +22,7 @@ import android.widget.Toast;
 
 import com.calvindo.aldi.sutanto.tubes.adapter.RecyclerViewAdapter;
 import com.calvindo.aldi.sutanto.tubes.databinding.FragmentHomeBinding;
+import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
 import com.calvindo.aldi.sutanto.tubes.models.ListKost;
 
@@ -44,6 +48,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView myRecyclerView;
     FragmentHomeBinding fragmentHomeBinding;
     private Button button_map;
+    private SharedPreferences preferences;
+    public static final int mode = Activity.MODE_PRIVATE;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -73,19 +79,19 @@ public class HomeFragment extends Fragment {
         ListKost = new ArrayList<>();
         ListKost.add(new Kost("Kost Premium", "Gombong",
                 "Jl. Potongan", "-7.607468", "109.515752", "082112134121",
-                2000000.00 , "https://pbs.twimg.com/media/EjuODzyVkAAaMNT?format=jpg&name=large"));
+                2000000.00 , "https://pbs.twimg.com/media/EjuODzyVkAAaMNT?format=jpg&name=large", 0));
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
                 "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
-                3000000.00 , "https://pbs.twimg.com/media/EjuOb1YVcAEh__k?format=jpg&name=900x900"));
+                3000000.00 , "https://pbs.twimg.com/media/EjuOb1YVcAEh__k?format=jpg&name=900x900",0));
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
                         "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
-                        3000000.00 , "https://pbs.twimg.com/media/EjuOeDTUYAEkWVc?format=jpg&name=medium"));
+                        3000000.00 , "https://pbs.twimg.com/media/EjuOeDTUYAEkWVc?format=jpg&name=medium",0));
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
                         "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
-                        3000000.00 , "https://pbs.twimg.com/media/EjuOhDEVkAA1Nrv?format=jpg&name=small"));
+                        3000000.00 , "https://pbs.twimg.com/media/EjuOhDEVkAA1Nrv?format=jpg&name=small",0));
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
                         "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
-                        3000000.00 , "https://pbs.twimg.com/media/EjuOjU5VkAAETkt?format=jpg&name=900x900"));
+                        3000000.00 , "https://pbs.twimg.com/media/EjuOjU5VkAAETkt?format=jpg&name=900x900",0));
     }
 
     @Override
@@ -104,4 +110,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
+
 }

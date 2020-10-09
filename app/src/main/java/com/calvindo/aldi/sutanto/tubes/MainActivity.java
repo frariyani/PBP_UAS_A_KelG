@@ -5,15 +5,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences preferences;
+    Button btn_camera;
     public static final int mode = Activity.MODE_PRIVATE;
 
     //Inisialisasi variabel navListener pada saat menu di click
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //set default layout dengan homeFragment
         Fragment default_frag = new HomeFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
@@ -57,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
         //memanggil fungsi bottom navigation ke dalam layout
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
         bottomNavigation.setOnNavigationItemSelectedListener(navListener);
+
+        btn_camera = (Button) findViewById(R.id.btn_camera);
+        btn_camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(this,kamera.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

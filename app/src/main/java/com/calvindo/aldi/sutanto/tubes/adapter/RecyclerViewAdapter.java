@@ -1,27 +1,19 @@
 package com.calvindo.aldi.sutanto.tubes.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
-import com.calvindo.aldi.sutanto.tubes.Database.FavDAO;
-import com.calvindo.aldi.sutanto.tubes.MainActivity;
-import com.calvindo.aldi.sutanto.tubes.R;
+import com.calvindo.aldi.sutanto.tubes.KostOnMAP;
 import com.calvindo.aldi.sutanto.tubes.databinding.CardviewBinding;
-import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
 
 import java.util.List;
@@ -93,6 +85,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         Toast toast = Toast.makeText(view.getContext(), "Successfully removed to favorite", Toast.LENGTH_SHORT);
                         toast.show();
                     }
+                }
+            });
+
+            cardviewBinding.btnMap.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    latitude = mData.get(getAdapterPosition()).getLatitude();
+                    longitude = mData.get(getAdapterPosition()).getLongitude();
+                    Intent intent = new Intent(view.getContext(), KostOnMAP.class);
+                    intent.putExtra("LONGITUDE", longitude);
+                    intent.putExtra("LATITUDE", latitude);
+                    view.getContext().startActivity(intent);
                 }
             });
         }

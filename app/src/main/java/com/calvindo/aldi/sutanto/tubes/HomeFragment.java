@@ -5,11 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,16 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
-import com.calvindo.aldi.sutanto.tubes.adapter.FavoriteAdapter;
 import com.calvindo.aldi.sutanto.tubes.adapter.RecyclerViewAdapter;
 import com.calvindo.aldi.sutanto.tubes.databinding.FragmentHomeBinding;
-import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
-import com.calvindo.aldi.sutanto.tubes.models.ListKost;
 
 import java.util.ArrayList;
 import java.util.List;

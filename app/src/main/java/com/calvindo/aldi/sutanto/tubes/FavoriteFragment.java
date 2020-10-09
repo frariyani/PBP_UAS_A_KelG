@@ -14,13 +14,9 @@ import android.widget.Toast;
 
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
 import com.calvindo.aldi.sutanto.tubes.adapter.FavoriteAdapter;
-import com.calvindo.aldi.sutanto.tubes.adapter.RecyclerViewAdapter;
 import com.calvindo.aldi.sutanto.tubes.databinding.FragmentFavoriteBinding;
-import com.calvindo.aldi.sutanto.tubes.databinding.FragmentHomeBinding;
-import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +36,6 @@ public class FavoriteFragment extends Fragment {
     private String mParam2;
     private RecyclerView myRecyclerView;
     private FavoriteAdapter adapter;
-    private List<Favorites> ListFav;
     public FavoriteFragment() {
         // Required empty public constructor
     }

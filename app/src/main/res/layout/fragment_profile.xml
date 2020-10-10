@@ -20,8 +20,7 @@
                     android:id="@+id/avatarView"
                     android:layout_width="match_parent"
                     android:layout_marginTop="30dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/userphoto"/>
+                    android:layout_height="150dp" />
                 <TextView
                     android:id="@+id/namaView"
                     android:layout_width="match_parent"

@@ -18,7 +18,10 @@ import com.calvindo.aldi.sutanto.tubes.HomeFragment;
 import com.calvindo.aldi.sutanto.tubes.R;
 import com.calvindo.aldi.sutanto.tubes.databinding.CardviewBinding;
 import com.calvindo.aldi.sutanto.tubes.databinding.FavCardviewBinding;
+import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -26,13 +29,18 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
     private static final String TAG = "RecyclerViewAdapter";
     private int id;
     List<Kost> mData;
+    List<Favorites> fav;
     private Context mContext;
-    FavoriteAdapter adapter;
-    RecyclerView myRecyclerView;
 
-    public FavoriteAdapter(Context context, List<Kost> mData) {
+    private String uid;
+
+    //Firebase
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+
+    public FavoriteAdapter(Context context, List<Favorites> fav) {
         this.mContext = context;
-        this.mData = mData;
+        this.fav = fav;
         notifyDataSetChanged();
     }
 
@@ -49,14 +57,14 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        final Kost kost = mData.get(position);
-        holder.favCardviewBinding.setFav(kost);
+        final Favorites favorites = fav.get(position);
+        holder.favCardviewBinding.setFav(favorites);
         holder.favCardviewBinding.executePendingBindings();
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return fav.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -69,26 +77,26 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
 
             super(favCardviewBinding.getRoot());
             this.favCardviewBinding = favCardviewBinding;
+            auth = FirebaseAuth.getInstance();
+            user = auth.getCurrentUser();
+
 
             favCardviewBinding.btnFav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG,"onClick: " + mData.get(getAdapterPosition()) );
-                    id = mData.get(getAdapterPosition()).getId();
-
-                    if (mData.get(getAdapterPosition()).getStatus() == 0){
-                        mData.get(getAdapterPosition()).setStatus(1);
-                        status = mData.get(getAdapterPosition()).getStatus();
+                    id = fav.get(getAdapterPosition()).getIdkost();
+                    uid = user.getUid();
+                    if (fav.get(getAdapterPosition()).getStatus() == 0){
+                        fav.get(getAdapterPosition()).setStatus(1);
+                        status = fav.get(getAdapterPosition()).getStatus();
                         update(id,1);
-//                        getKost();
                         Toast toast = Toast.makeText(view.getContext(), "Successfully added to favorite", Toast.LENGTH_SHORT);
                         toast.show();
-//                        myRecyclerView.setAdapter(adapter);
                     }else {
-                        mData.get(getAdapterPosition()).setStatus(0);
-                        status = mData.get(getAdapterPosition()).getStatus();
+//                        mData.get(getAdapterPosition()).setStatus(0);
+//                        status = mData.get(getAdapterPosition()).getStatus();
                         update(id,0);
-//                        getKost();
+                        delete(id,uid);
                         Toast toast = Toast.makeText(view.getContext(), "Successfully removed to favorite", Toast.LENGTH_SHORT);
                         toast.show();
                     }
@@ -110,6 +118,18 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyView
             }).start();
         }
 
+        public void delete(final int id, String uid){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Favorites cekFav = DatabaseClient.getInstance(mContext)
+                            .getDatabase().favDAO().fav(id,uid);
+
+                    DatabaseClient.getInstance(mContext).getDatabase()
+                            .favDAO().delete(cekFav);
+                }
+            }).start();
+        }
 
     }
 

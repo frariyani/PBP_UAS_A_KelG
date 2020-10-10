@@ -25,10 +25,7 @@
         <FrameLayout
             android:id="@+id/fragment"
             android:layout_width="match_parent"
-            android:layout_height="675dp" >
-
-
-        </FrameLayout>
+            android:layout_height="675dp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

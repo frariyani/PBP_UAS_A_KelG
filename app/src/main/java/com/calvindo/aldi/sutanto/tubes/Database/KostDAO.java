@@ -32,6 +32,9 @@ public interface KostDAO {
     @Update
     void update(Kost kost);
 
+    @Update
+    void updateALL(List<Kost> kosts);
+
     @Delete
     void delete(Kost kost);
 

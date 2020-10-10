@@ -3,7 +3,7 @@
     <data>
         <variable
             name="fav"
-            type="com.calvindo.aldi.sutanto.tubes.models.Kost" />
+            type="com.calvindo.aldi.sutanto.tubes.models.Favorites" />
     </data>
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"

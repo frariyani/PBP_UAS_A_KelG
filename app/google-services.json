@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "357522036160",
+    "firebase_url": "https://tubes-pbp-68a32.firebaseio.com",
+    "project_id": "tubes-pbp-68a32",
+    "storage_bucket": "tubes-pbp-68a32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357522036160:android:dc4798932eeea5b65fa425",
+        "android_client_info": {
+          "package_name": "com.calvindo.aldi.sutanto.tubes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "357522036160-r7lf5rf37bg6aj35inh0f6vqdjbiauhp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1M_PDdCQ8hUGrkJvzGUWOimNUShBdfqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "357522036160-r7lf5rf37bg6aj35inh0f6vqdjbiauhp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

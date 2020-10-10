@@ -35,7 +35,6 @@ public class FavoriteFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    Button favorit;
     private RecyclerView myRecyclerView;
     private FavoriteAdapter adapter;
     public FavoriteFragment() {

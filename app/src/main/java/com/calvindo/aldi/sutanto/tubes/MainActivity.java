@@ -1,13 +1,22 @@
 package com.calvindo.aldi.sutanto.tubes;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +26,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences preferences;
-    Button btn_camera;
+    private String CHANNEL_ID = "Channel 1";
+    Button kamera,favorit;
     public static final int mode = Activity.MODE_PRIVATE;
 
     //Inisialisasi variabel navListener pada saat menu di click
@@ -63,16 +73,63 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
         bottomNavigation.setOnNavigationItemSelectedListener(navListener);
 
-        btn_camera = (Button) findViewById(R.id.btn_camera);
-        btn_camera.setOnClickListener(new View.OnClickListener() {
+        kamera = (Button) findViewById(R.id.btn_camera);
+        kamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(this,kamera.class);
-                startActivity(intent);
+                Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(i,0);
             }
+        });
+
+        favorit = (Button) findViewById(R.id.btn_fav);
+        favorit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNotificationChannel();
+                addNotification();
+            }
+
+            private void addNotification() {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this,CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_launcher_background)
+                        .setContentTitle("GMBKost Konfirmation")
+                        .setContentText("Selamat pesanan kost anda berhasil ditambahkan atau kurangi")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                Intent notificationIntent = new Intent(this, FavoriteFragment.class);
+                PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(contentIntent);
+
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(0,builder.build());
+
+            }
+
+            private void createNotificationChannel() {
+                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+                    CharSequence name = "Channel 1";
+                    String description = "This is Channel 1";
+                    int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                    NotificationChannel channel = new NotificationChannel(CHANNEL_ID,name,importance);
+                    channel.setDescription(description);
+                    //daftarkan channel di system anda
+                    NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                    notificationManager.createNotificationChannel(channel);
+                }
+            }
+
         });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0)
+        {
+            Log.d("Get","Your Photo has been Slain");
 
+        }
+    }
 }

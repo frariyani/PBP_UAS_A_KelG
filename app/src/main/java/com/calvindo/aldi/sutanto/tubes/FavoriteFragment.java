@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
@@ -34,6 +35,7 @@ public class FavoriteFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    Button favorit;
     private RecyclerView myRecyclerView;
     private FavoriteAdapter adapter;
     public FavoriteFragment() {
@@ -102,5 +104,6 @@ public class FavoriteFragment extends Fragment {
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         getKost();
         return v;
+
     }
 }

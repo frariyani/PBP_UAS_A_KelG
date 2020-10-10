@@ -44,13 +44,14 @@
                         android:text="@{fav.name}"
                         android:textStyle="bold"
                         android:textColor="#000"/>
+
                     <ToggleButton
                         android:id="@+id/btn_fav"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginTop="10dp"
-                        android:checked="@{fav.status == 1 ? true : false}"
                         android:background="@drawable/toggle_selector"
+                        android:checked="@{fav.status == 1 ? true : false}"
                         android:textOff=""
                         android:textOn=""
                         android:textSize="5dp" />

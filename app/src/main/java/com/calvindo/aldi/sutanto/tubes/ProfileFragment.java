@@ -28,10 +28,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.calvindo.aldi.sutanto.tubes.databinding.FragmentProfileBinding;
 import com.calvindo.aldi.sutanto.tubes.models.User;
 import com.calvindo.aldi.sutanto.tubes.models.UserDummy;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,9 +46,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -71,6 +77,7 @@ public class ProfileFragment extends Fragment{
 
     //upload avatar
     private Uri PickedImgUri;
+    private String imagePath = "Avatar_Images/";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -191,12 +198,49 @@ public class ProfileFragment extends Fragment{
         if(resultCode == RESULT_OK){
             if(requestCode == IMAGE_PICK_GALLERY_CODE){
                 PickedImgUri = data.getData();
+
+                uploadAvatar(PickedImgUri);
             }
             if(requestCode == IMAGE_PICK_CAMERA_CODE){
-
+                uploadAvatar(PickedImgUri);
             }
         }
     }
+
+    private void uploadAvatar(Uri uri){
+        String filePath = imagePath+"_"+user.getUid();
+        StorageReference storageFB = storageReference.child(filePath);
+        storageFB.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while(!uriTask.isSuccessful());
+                        Uri downloadUri = uriTask.getResult();
+
+                        if(uriTask.isSuccessful()){
+                            HashMap<String, Object> results = new HashMap<>();
+                            results.put(imagePath, downloadUri.toString());
+                            databaseReference.child(user.getUid()).updateChildren(results)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(getActivity(), "Upload success", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }else{
+                            Toast.makeText(getActivity(), "Upload Failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
 
     private void showUploadOptions(){
         String options[] = {"Camera", "Gallery"};
@@ -262,6 +306,7 @@ public class ProfileFragment extends Fragment{
                     emailTv.setText(email);
                     notelpTv.setText(notelp);
                     alamatTv.setText(alamat);
+
                 }
             }
 

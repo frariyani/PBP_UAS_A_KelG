@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences preferences;
     public static final int mode = Activity.MODE_PRIVATE;
-    Button favorit;
-    private String CHANNEL_ID = "Channe 1";
 
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
@@ -91,50 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        favorit = (Button) findViewById(R.id.btn_fav);
-        favorit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNotification();
-                addNotification();
-            }
 
-            private void createNotification() {
-                if(Build.VERSION.SDK_INT >= O){
-                    CharSequence name = "Channel 1";
-                    String description = "This is Channel 1";
-                    int importance = NotificationManager.IMPORTANCE_DEFAULT;
-                    NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-                    channel.setDescription(description);
-
-                    //notification for System after add kost
-                    NotificationManager notificationManager = getSystemService(NotificationManager.class);
-                    notificationManager.createNotificationChannel(channel);
-                }
-            }
-
-            private  void addNotification(){
-                //Menambhakan Notif saat menambah favorit kost.
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_launcher_background)
-                        .setContentTitle("BErhasil")
-                        .setContentText("Selamat kost anda berhasil ditambahkan")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-                //Membuat Intent yang menampilkan Notification
-                Intent notificationIntent = new Intent(this,MainActivity.class);
-                PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-                builder.setContentIntent(contentIntent);
-
-                //Menampilkamn Notifikasi
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                manager.notify(0,builder.build());
-
-            }
-
-
-
-        });
 
 
 
@@ -145,5 +100,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         auth.addAuthStateListener(authListener);
     }
+
+
 
 }

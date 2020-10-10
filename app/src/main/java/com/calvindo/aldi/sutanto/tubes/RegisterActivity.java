@@ -1,6 +1,11 @@
 package com.calvindo.aldi.sutanto.tubes;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -12,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import com.calvindo.aldi.sutanto.tubes.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference reference;
     private String getEmail, getPassword;
     private TextView loginLink;
+    private String CHANNEL_ID = "Channe 1";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +65,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(isDataValid()){
                     createUserAccount();
+                    createNotification();
+                    addNotification();
                 }
             }
         });
@@ -72,6 +81,39 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void createNotification() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "Channel 1";
+            String description = "This is Channel 1";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+
+            //notification for System after add kost
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void addNotification(){
+        //Menambhakan Notif saat menambah favorit kost.
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        builder.setSmallIcon(R.drawable.ic_launcher_background);
+        builder.setContentTitle("Register Berhasil");
+        builder.setContentText("Selamat akun anda berhasil ditambahkan");
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        //Membuat Intent yang menampilkan Notification
+        Intent notificationIntent = new Intent(this,FavoriteFragment.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
+        //Menampilkamn Notifikasi
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.notify(0,builder.build());
+    }
+
 
     private boolean isDataValid(){
         getEmail = editEmail.getText().toString();

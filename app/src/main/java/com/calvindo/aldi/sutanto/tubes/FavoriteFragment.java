@@ -105,5 +105,6 @@ public class FavoriteFragment extends Fragment {
         getKost();
         return v;
 
+
     }
 }

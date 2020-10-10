@@ -70,7 +70,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="0.8"
                     android:backgroundTint="#2196F3"
-                    android:text="btn_edit"
+                    android:text="Edit Profil"
                     android:textColor="@android:color/white" />
 
                 <LinearLayout

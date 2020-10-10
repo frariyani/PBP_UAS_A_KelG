@@ -26,12 +26,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
 import com.calvindo.aldi.sutanto.tubes.databinding.FragmentProfileBinding;
+import com.calvindo.aldi.sutanto.tubes.models.Kost;
 import com.calvindo.aldi.sutanto.tubes.models.User;
 import com.calvindo.aldi.sutanto.tubes.models.UserDummy;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,6 +53,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -328,5 +330,4 @@ public class ProfileFragment extends Fragment{
             }
         });
     }
-
 }

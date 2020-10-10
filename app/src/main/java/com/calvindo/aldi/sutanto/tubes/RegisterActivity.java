@@ -164,7 +164,7 @@ public class RegisterActivity extends AppCompatActivity {
                             hashMap.put("notelp", editNoTelp.getText().toString());
                             hashMap.put("alamat", editAlamat.getText().toString());
                             hashMap.put("nama", editNama.getText().toString());
-                            hashMap.put("avatar", ""); //input di edit profile
+                            hashMap.put("Avatar_Images", "https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg"); //input di edit profile
 
                             //store hashmap ke database
                             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();

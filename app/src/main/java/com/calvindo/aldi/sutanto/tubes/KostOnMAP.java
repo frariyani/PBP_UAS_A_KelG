@@ -101,27 +101,6 @@ public class KostOnMAP extends Activity implements OnMapReadyCallback, Permissio
             longitude = getIntent().getStringExtra("LONGITUDE");
         }
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu, menu);
-//        return true;
-//    }
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle item selection
-//        switch (item.getItemId()) {
-//            case R.id.tema1: mapStyle = Style.MAPBOX_STREETS; break;
-//            case R.id.tema2: mapStyle = Style.TRAFFIC_NIGHT; break;
-//            case R.id.tema3: mapStyle = Style.TRAFFIC_DAY; break;
-//            default: return super.onOptionsItemSelected(item);
-//        }
-//
-//        mapboxMap.setStyle(mapStyle, this::onStyleLoaded);
-//        return true;
-//    }
-
-
 
     public void onStyleLoaded(@NonNull Style style) {
         List<Feature> symbolLayerIconFeatureList = new ArrayList<>();

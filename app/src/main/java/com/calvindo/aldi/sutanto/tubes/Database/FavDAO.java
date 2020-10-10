@@ -13,8 +13,11 @@ import java.util.List;
 @Dao
 public interface FavDAO {
 
-    @Query("SELECT * FROM favorites")
-    List<Favorites> getAll();
+    @Query("SELECT * FROM favorites WHERE uid LIKE :uid")
+    List<Favorites> getAll(String uid);
+
+    @Query("SELECT * FROM favorites WHERE idkost LIKE :id AND  uid LIKE :uid")
+    Favorites fav(int id, String uid);
 
     @Insert
     void insert(Favorites favorites);

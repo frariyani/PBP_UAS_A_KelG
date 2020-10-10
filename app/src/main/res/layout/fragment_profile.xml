@@ -44,115 +44,90 @@
                 android:layout_below="@+id/top_view"
                 android:layout_weight="1"
                 android:background="@drawable/ic_wave" />
-
             <LinearLayout
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/view2"
+                android:orientation="vertical"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="6dp"
-                android:orientation="vertical">
-
+                android:layout_below="@+id/view2"
+                android:layout_marginTop="30dp">
                 <com.google.android.material.button.MaterialButton
+                    android:layout_gravity="center"
                     android:id="@+id/logout_button"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="0.8"
-                    android:backgroundTint="#2196F3"
                     android:text="Logout"
-                    android:textColor="@android:color/white" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_edit"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="8dp"
+                    android:textColor="@android:color/white"
                     android:layout_weight="0.8"
+                    android:layout_marginEnd="8dp"
                     android:backgroundTint="#2196F3"
-                    android:text="Edit Profile"
-                    android:textColor="@android:color/white" />
-
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"/>
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:paddingLeft="70dp"
                     android:layout_marginBottom="10dp"
-                    android:paddingLeft="70dp">
-
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                     <ImageView
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:src="@drawable/ic_baseline_account_circle_24" />
-
+                        android:src="@drawable/ic_baseline_account_circle_24"/>
                     <TextView
                         android:id="@+id/usernameView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp" />
+                        android:layout_marginRight="10dp"/>
                 </LinearLayout>
-
                 <LinearLayout
+                    android:paddingLeft="70dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:paddingLeft="70dp">
-
+                    android:layout_marginBottom="10dp">
                     <ImageView
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:src="@drawable/ic_baseline_email_24" />
-
+                        android:src="@drawable/ic_baseline_email_24"/>
                     <TextView
                         android:id="@+id/emailView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp" />
+                        android:layout_marginRight="10dp"/>
                 </LinearLayout>
-
                 <LinearLayout
+                    android:paddingLeft="70dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:paddingLeft="70dp">
-
+                    android:layout_marginBottom="10dp">
                     <ImageView
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:src="@drawable/ic_baseline_phone_iphone_24" />
-
+                        android:src="@drawable/ic_baseline_phone_iphone_24"/>
                     <TextView
                         android:id="@+id/notelpView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp" />
+                        android:layout_marginRight="10dp"/>
                 </LinearLayout>
-
                 <LinearLayout
+                    android:paddingLeft="70dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:paddingLeft="70dp">
-
+                    android:layout_marginBottom="10dp">
                     <ImageView
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:src="@drawable/ic_baseline_location_on_24" />
-
+                        android:src="@drawable/ic_baseline_location_on_24"/>
                     <TextView
                         android:id="@+id/alamatView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp" />
+                        android:layout_marginRight="10dp"/>
                 </LinearLayout>
 
             </LinearLayout>

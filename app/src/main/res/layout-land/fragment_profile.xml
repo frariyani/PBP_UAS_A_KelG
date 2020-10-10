@@ -9,32 +9,34 @@
 
 
             <!-- TODO: Update blank fragment layout -->
+
             <LinearLayout
                 android:id="@+id/top_view"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/colorPrimary">
+                android:layout_width="308dp"
+                android:layout_height="384dp"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/avatarView"
                     android:layout_width="match_parent"
+                    android:layout_height="147dp"
                     android:layout_marginTop="30dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/userphoto"/>
+                    android:src="@drawable/userphoto" />
+
                 <TextView
                     android:id="@+id/namaView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="251dp"
+                    android:layout_height="223dp"
                     android:layout_below="@+id/top_view"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center"
-                    android:textStyle="bold"
                     android:textColor="#fff"
-                    android:textSize="30dp" />
+                    android:textSize="30dp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <View
@@ -42,37 +44,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_below="@+id/top_view"
+                android:layout_marginTop="-385dp"
                 android:layout_weight="1"
                 android:background="@drawable/ic_wave" />
 
             <LinearLayout
-                android:layout_width="360dp"
-                android:layout_height="wrap_content"
+                android:layout_width="440dp"
+                android:layout_height="245dp"
                 android:layout_below="@+id/view2"
+                android:layout_alignParentEnd="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="-41dp"
+                android:layout_marginEnd="13dp"
                 android:orientation="vertical">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/logout_button"
                     android:layout_width="150dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="112dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="0.8"
                     android:backgroundTint="#2196F3"
                     android:text="Logout"
-                    android:textColor="@android:color/white" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_edit"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="0.8"
-                    android:backgroundTint="#2196F3"
-                    android:text="Edit Profile"
                     android:textColor="@android:color/white" />
 
                 <LinearLayout

@@ -75,6 +75,7 @@ public class ProfileFragment extends Fragment{
     private ImageView avatarIv;
     private TextView namaTv, usernameTv, emailTv, notelpTv, alamatTv;
     private MaterialButton logoutBtn;
+    private MaterialButton editBtn;
 
     //upload avatar
     private Uri PickedImgUri;
@@ -117,6 +118,15 @@ public class ProfileFragment extends Fragment{
             }
         });
 
+        editBtn = view.findViewById(R.id.btn_edit);
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               Intent i = new Intent(this, editProfil.class);
+               startActivity(i);
+            }
+        });
+
         avatarIv = view.findViewById(R.id.avatarView);
         avatarIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +137,7 @@ public class ProfileFragment extends Fragment{
 
         return view;
     }
+
 
     private boolean checkStoragePermission(){
         boolean result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)

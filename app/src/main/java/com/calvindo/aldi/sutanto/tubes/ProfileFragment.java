@@ -46,10 +46,10 @@ public class ProfileFragment extends Fragment{
         return view;
     }
 
-    @BindingAdapter("bind:loadDrawable")
-    public static void loadDrawable(ImageView imageView, String imageURL) {
-        int drawableResourceId = imageView.getResources().getIdentifier(imageURL, "drawable", imageView.getContext().getPackageName());
-        Log.i("tag","profile.id:" + drawableResourceId);
-        imageView.setImageResource(drawableResourceId);
-    }
+    //@BindingAdapter("bind:loadDrawable")
+    //public static void loadDrawable(ImageView imageView, String imageURL) {
+    //    int drawableResourceId = imageView.getResources().getIdentifier(imageURL, "drawable", imageView.getContext().getPackageName());
+    //    Log.i("tag","profile.id:" + drawableResourceId);
+    //    imageView.setImageResource(drawableResourceId);
+    //}
 }

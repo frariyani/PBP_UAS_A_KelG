@@ -21,6 +21,8 @@ public class User extends BaseObservable {
     private String notelp;
     private String alamat;
 
+    public User(){}
+
     public User(String avatar, String nama, String username, String email, String notelp, String alamat) {
         this.avatar = avatar;
         this.nama = nama;

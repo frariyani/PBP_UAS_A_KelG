@@ -86,6 +86,8 @@ public class ProfileFragment extends Fragment{
     private Uri PickedImgUri;
     private String storagePath = "Avatar_Images/";
 
+    private LoadingDialog loadingDialog;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -114,6 +116,9 @@ public class ProfileFragment extends Fragment{
         //init array permission
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+        //init loading dialog
+        loadingDialog = new LoadingDialog(getActivity());
 
         getDataFromFirebase();
 
@@ -223,6 +228,8 @@ public class ProfileFragment extends Fragment{
         //private Uri PickedImgUri;
         //private String storagePath = "Avatar_Images/";
 
+        loadingDialog.startLoadingDialog();
+
         String filePathName = storagePath+""+user.getUid();
         StorageReference mStorage = storageReference.child(filePathName);
         mStorage.putFile(uri)
@@ -242,6 +249,7 @@ public class ProfileFragment extends Fragment{
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                                            loadingDialog.dismissDialog();
                                         }
                                     });
                         }else{
@@ -323,7 +331,10 @@ public class ProfileFragment extends Fragment{
                     emailTv.setText(email);
                     notelpTv.setText(notelp);
                     alamatTv.setText(alamat);
-                    Glide.with(getContext())
+                    if(getActivity()==null){
+                        return;
+                    }
+                    Glide.with(getActivity())
                             .load(avatar)
                             .apply(RequestOptions.circleCropTransform())
                             .into(avatarIv);

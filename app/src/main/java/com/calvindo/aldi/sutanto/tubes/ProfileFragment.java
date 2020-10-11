@@ -30,6 +30,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
 import com.calvindo.aldi.sutanto.tubes.databinding.FragmentProfileBinding;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
@@ -47,6 +49,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -71,17 +74,17 @@ public class ProfileFragment extends Fragment{
     private FirebaseUser user;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
 
     //profile
     private ImageView avatarIv;
     private TextView namaTv, usernameTv, emailTv, notelpTv, alamatTv;
     private MaterialButton logoutBtn;
-    private MaterialButton editBtn;
 
     //upload avatar
     private Uri PickedImgUri;
-    private String imagePath = "Avatar_Images/";
+    private String storagePath = "Avatar_Images/";
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -98,6 +101,8 @@ public class ProfileFragment extends Fragment{
         user = auth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("User");
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReferenceFromUrl("gs://tubes-pbp-68a32.appspot.com/");
 
         //init views
         namaTv = view.findViewById(R.id.namaView);
@@ -120,8 +125,6 @@ public class ProfileFragment extends Fragment{
             }
         });
 
-
-
         avatarIv = view.findViewById(R.id.avatarView);
         avatarIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,27 +136,26 @@ public class ProfileFragment extends Fragment{
         return view;
     }
 
-
     private boolean checkStoragePermission(){
         boolean result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                         == (PackageManager.PERMISSION_GRANTED);
+                == (PackageManager.PERMISSION_GRANTED);
         return result;
     }
 
     private void requestStoragePermission(){
-        ActivityCompat.requestPermissions(getActivity(), storagePermissions, STORAGE_REQUEST_CODE);
+        requestPermissions(storagePermissions, STORAGE_REQUEST_CODE);
     }
 
     private boolean checkCameraPermission(){
         boolean resultCamera = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
-                            == (PackageManager.PERMISSION_GRANTED);
+                == (PackageManager.PERMISSION_GRANTED);
         boolean resultWrite = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            == (PackageManager.PERMISSION_GRANTED);
+                == (PackageManager.PERMISSION_GRANTED);
         return resultCamera && resultWrite;
     }
 
     private void requestCameraPermission(){
-        ActivityCompat.requestPermissions(getActivity(), cameraPermissions, CAMERA_REQUEST_CODE);
+        requestPermissions( cameraPermissions, CAMERA_REQUEST_CODE);
     }
 
     @Override
@@ -169,6 +171,7 @@ public class ProfileFragment extends Fragment{
                     }
                 }
             }
+            break;
             case STORAGE_REQUEST_CODE:{
                 if(grantResults.length > 0){
                     boolean writeAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
@@ -177,6 +180,7 @@ public class ProfileFragment extends Fragment{
                     }
                 }
             }
+            break;
         }
     }
 
@@ -215,9 +219,13 @@ public class ProfileFragment extends Fragment{
     }
 
     private void uploadAvatar(Uri uri){
-        String filePath = imagePath+"_"+user.getUid();
-        StorageReference storageFB = storageReference.child(filePath);
-        storageFB.putFile(uri)
+        //private ImageView avatarIv;
+        //private Uri PickedImgUri;
+        //private String storagePath = "Avatar_Images/";
+
+        String filePathName = storagePath+""+user.getUid();
+        StorageReference mStorage = storageReference.child(filePathName);
+        mStorage.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -227,16 +235,17 @@ public class ProfileFragment extends Fragment{
 
                         if(uriTask.isSuccessful()){
                             HashMap<String, Object> results = new HashMap<>();
-                            results.put(imagePath, downloadUri.toString());
+                            results.put(storagePath, downloadUri.toString());
+
                             databaseReference.child(user.getUid()).updateChildren(results)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Toast.makeText(getActivity(), "Upload success", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
                                         }
                                     });
                         }else{
-                            Toast.makeText(getActivity(), "Upload Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -246,6 +255,7 @@ public class ProfileFragment extends Fragment{
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
     }
 
 
@@ -286,12 +296,12 @@ public class ProfileFragment extends Fragment{
     //    startActivityForResult(galleryIntent, GALLERY_REQUEST);
     //}
 
-    //@BindingAdapter("bind:loadDrawable")
-    //public static void loadDrawable(ImageView imageView, String imageURL) {
-    //    int drawableResourceId = imageView.getResources().getIdentifier(imageURL, "drawable", imageView.getContext().getPackageName());
-    //    Log.i("tag","profile.id:" + drawableResourceId);
-    //    imageView.setImageResource(drawableResourceId);
-    //}
+//    @BindingAdapter("bind:loadDrawable")
+//    public static void loadDrawable(ImageView imageView, String imageURL) {
+//        int drawableResourceId = imageView.getResources().getIdentifier(imageURL, "drawable", imageView.getContext().getPackageName());
+//        Log.i("tag","profile.id:" + drawableResourceId);
+//        imageView.setImageResource(drawableResourceId);
+//    }
 
     private void getDataFromFirebase(){
         Query query = databaseReference.orderByChild("email").equalTo(user.getEmail());
@@ -301,7 +311,7 @@ public class ProfileFragment extends Fragment{
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     //mengambil data dari database
                     String alamat = ""+ds.child("alamat").getValue();
-                    String avatar = ""+ds.child("avatar").getValue();
+                    String avatar = ""+ds.child("Avatar_Images").getValue();
                     String email = ""+ds.child("email").getValue();
                     String nama = ""+ds.child("nama").getValue();
                     String notelp = ""+ds.child("notelp").getValue();
@@ -313,7 +323,10 @@ public class ProfileFragment extends Fragment{
                     emailTv.setText(email);
                     notelpTv.setText(notelp);
                     alamatTv.setText(alamat);
-
+                    Glide.with(getContext())
+                            .load(avatar)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(avatarIv);
                 }
             }
 

@@ -76,16 +76,16 @@ public class HomeFragment extends Fragment {
                 "Jl. Potongan", "-7.607468", "109.515752", "082112134121",
                 2000000.00 , "https://pbs.twimg.com/media/EjuODzyVkAAaMNT?format=jpg&name=large", 0));
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
-                "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
+                "Jl. Potongan", "-7.797556", "110.337681", "082152134121",
                 3000000.00 , "https://pbs.twimg.com/media/EjuOb1YVcAEh__k?format=jpg&name=900x900",0));
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
-                        "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
+                        "Jl. Potongan", "-7.825174", "110.367202", "082152134121",
                         3000000.00 , "https://pbs.twimg.com/media/EjuOeDTUYAEkWVc?format=jpg&name=medium",0));
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
-                        "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
+                        "Jl. Potongan", "-7.784592", "110.407222", "082152134121",
                         3000000.00 , "https://pbs.twimg.com/media/EjuOhDEVkAA1Nrv?format=jpg&name=small",0));
         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
-                        "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
+                        "Jl. Potongan", "-7.783312", "110.391650", "082152134121",
                         3000000.00 , "https://pbs.twimg.com/media/EjuOjU5VkAAETkt?format=jpg&name=900x900",0));
 
     }

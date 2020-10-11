@@ -19,6 +19,12 @@ public class Favorites implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
+    @ColumnInfo(name = "idkost")
+    public int idkost;
+
+    @ColumnInfo(name = "uid")
+    public String uid;
+
     @ColumnInfo(name = "name")
     public String name;
 
@@ -46,7 +52,11 @@ public class Favorites implements Serializable {
     @ColumnInfo(name = "status")
     private int status;
 
-    public Favorites(String name, String kota, String alamat, String latitude, String longitude, String HPOwner, Double cost, String image, int status) {
+    public Favorites(int idkost, String uid, String name, String kota, String alamat,
+                     String latitude, String longitude, String HPOwner, Double cost,
+                     String image, int status) {
+        this.idkost = idkost;
+        this.uid = uid;
         this.name = name;
         this.kota = kota;
         this.alamat = alamat;
@@ -56,6 +66,30 @@ public class Favorites implements Serializable {
         this.cost = cost;
         this.image = image;
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getIdkost() {
+        return idkost;
+    }
+
+    public void setIdkost(int idkost) {
+        this.idkost = idkost;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -114,14 +148,6 @@ public class Favorites implements Serializable {
         this.cost = cost;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
     public String getImage() {
         return image;
     }
@@ -129,10 +155,12 @@ public class Favorites implements Serializable {
     public void setImage(String image) {
         this.image = image;
     }
-//    @BindingAdapter("android:loadImage")
-//    public static void loadImage(ImageView imageView, String imgURL){
-//        Glide.with(imageView)
-//                .load(imgURL)
-//                .into(imageView);
-//    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

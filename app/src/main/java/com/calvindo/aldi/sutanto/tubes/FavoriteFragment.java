@@ -10,12 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
 import com.calvindo.aldi.sutanto.tubes.adapter.FavoriteAdapter;
 import com.calvindo.aldi.sutanto.tubes.databinding.FragmentFavoriteBinding;
+import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -36,6 +40,15 @@ public class FavoriteFragment extends Fragment {
     private String mParam2;
     private RecyclerView myRecyclerView;
     private FavoriteAdapter adapter;
+    private String uid;
+
+    //Firebase
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+
+
+
+
     public FavoriteFragment() {
         // Required empty public constructor
     }
@@ -67,23 +80,27 @@ public class FavoriteFragment extends Fragment {
         }
     }
 
-    public void getKost(){
-        class GetKost extends AsyncTask<Void,Void,List<Kost>>{
 
+    public void getKost(){
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        uid = user.getUid();
+        class GetKost extends AsyncTask<Void,Void,List<Favorites>>{
             @Override
-            protected List<Kost> doInBackground(Void... voids) {
-                List<Kost> kosts = DatabaseClient
+            protected List<Favorites> doInBackground(Void... voids) {
+                List<Favorites> favorites = DatabaseClient
                         .getInstance(getContext())
-                        .getDatabase().kostDAO().getAllFav();
-                return kosts;
+                        .getDatabase().favDAO().getAll(uid);
+                return favorites;
             }
             @Override
-            protected void onPostExecute(List<Kost> kosts) {
-                super.onPostExecute(kosts);
-                adapter = new FavoriteAdapter(getContext(), kosts);
-                myRecyclerView.setAdapter(adapter);
-                if (kosts.isEmpty()){
-                    Toast.makeText(getContext(), "Empty List " + kosts, Toast.LENGTH_SHORT).show();
+            protected void onPostExecute(List<Favorites> favorites) {
+                super.onPostExecute(favorites);
+                if (favorites.isEmpty()){
+                    Toast.makeText(getContext(), "Empty List ", Toast.LENGTH_SHORT).show();
+                }else {
+                    adapter = new FavoriteAdapter(getContext(), favorites);
+                    myRecyclerView.setAdapter(adapter);
                 }
             }
         }
@@ -102,5 +119,7 @@ public class FavoriteFragment extends Fragment {
         myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         getKost();
         return v;
+
+
     }
 }

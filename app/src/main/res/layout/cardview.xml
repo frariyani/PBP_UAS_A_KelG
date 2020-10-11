@@ -44,12 +44,11 @@
                         android:textStyle="bold"
                         android:textColor="#000"/>
 
-                    <ToggleButton
+                    <ImageButton
                         android:id="@+id/btn_fav"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_marginTop="10dp"
-                        android:checked="@{kost.status == 1 ? true : false}"
                         android:background="@drawable/toggle_selector"
                         android:textOff=""
                         android:textOn=""

@@ -1,28 +1,20 @@
 package com.calvindo.aldi.sutanto.tubes;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.databinding.BindingAdapter;
-import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +24,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
-import com.calvindo.aldi.sutanto.tubes.databinding.FragmentProfileBinding;
-import com.calvindo.aldi.sutanto.tubes.models.Kost;
-import com.calvindo.aldi.sutanto.tubes.models.User;
-import com.calvindo.aldi.sutanto.tubes.models.UserDummy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -53,10 +40,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 

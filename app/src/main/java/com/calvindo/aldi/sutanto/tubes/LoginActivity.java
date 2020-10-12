@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private String getEmail, getPassword;
     private TextView registerLink;
-    private String CHANNEL_ID = "Channe 1";
+    private String CHANNEL_ID = "Channel 1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

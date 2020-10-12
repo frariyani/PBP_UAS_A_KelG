@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+    private int index;
 
     //Inisialisasi variabel navListener pada saat menu di click
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -44,14 +45,17 @@ public class MainActivity extends AppCompatActivity {
                         //memilih homeFragment
                         case R.id.action_home:
                             selected = new HomeFragment();
+                            index = 0;
                             break;
                         //memilih favFragment
                         case R.id.action_fav:
                             selected = new FavoriteFragment();
+                            index = 1;
                             break;
                         //memilih profilFragment
                         case R.id.action_profile:
                             selected = new ProfileFragment();
+                            index = 2;
                             break;
                     }
                     //mengubah fragment sesuai fragment yang di pilih
@@ -65,18 +69,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
-        //set default layout dengan homeFragment
-        Fragment default_frag = new HomeFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
-                default_frag).commit();
-
-        //memanggil fungsi bottom navigation ke dalam layout
-        BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
-        bottomNavigation.setOnNavigationItemSelectedListener(navListener);
-
         auth = FirebaseAuth.getInstance();
 
         authListener = new FirebaseAuth.AuthStateListener() {
@@ -91,14 +83,29 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
+        //set default layout dengan homeFragment
 
+        if(savedInstanceState != null) {
+            int currentTab = savedInstanceState.getInt("CurrentTab", 0);
+            /* Set currently selected tab */
+        }else {
+            Fragment default_frag = new HomeFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
+                    default_frag).commit();
+        }
+        //memanggil fungsi bottom navigation ke dalam layout
+        BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
+        bottomNavigation.setOnNavigationItemSelectedListener(navListener);
 
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("CurrentTab", index);
+    }
     @Override
     protected void onStart() {
         super.onStart();
         auth.addAuthStateListener(authListener);
     }
-
 }

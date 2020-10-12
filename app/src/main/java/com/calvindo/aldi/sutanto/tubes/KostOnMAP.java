@@ -107,8 +107,7 @@ public class KostOnMAP extends Activity implements OnMapReadyCallback, Permissio
 
         KostOnMAP.this.enableLocationComponent(style);
         KostOnMAP.this.initLayers(style);
-        Point destination = Point.fromLngLat(Double.parseDouble(longitude),Double.parseDouble(latitude));
-        getRoute(origin, destination);
+
 
         mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
@@ -212,7 +211,8 @@ public class KostOnMAP extends Activity implements OnMapReadyCallback, Permissio
             locationComponent.setRenderMode(RenderMode.COMPASS);
             this.origin = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
                     locationComponent.getLastKnownLocation().getLatitude());
-
+            Point destination = Point.fromLngLat(Double.parseDouble(longitude),Double.parseDouble(latitude));
+            getRoute(origin, destination);
         } else {
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(this);

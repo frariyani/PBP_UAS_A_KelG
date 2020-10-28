@@ -12,6 +12,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -22,7 +23,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -69,11 +72,42 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
+    private NavigationView.OnNavigationItemSelectedListener navViewListener =
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment selected = new HomeFragment();
+
+                    switch (item.getItemId()){
+                        //memilih homeFragment
+                        case R.id.action_home:
+                            selected = new HomeFragment();
+                            index = 0;
+                            break;
+                        //memilih favFragment
+                        case R.id.action_fav:
+                            selected = new FavoriteFragment();
+                            index = 1;
+                            break;
+                        //memilih profilFragment
+                        case R.id.action_profile:
+                            selected = new ProfileFragment();
+                            index = 2;
+                            break;
+                    }
+                    //mengubah fragment sesuai fragment yang di pilih
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment,
+                            selected).commit();
+                    return true;
+                }
+            };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         auth = FirebaseAuth.getInstance();
+        int display_mode = getResources().getConfiguration().orientation;
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -98,8 +132,13 @@ public class MainActivity extends AppCompatActivity {
                     default_frag).commit();
         }
         //memanggil fungsi bottom navigation ke dalam layout
-        BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
-        bottomNavigation.setOnNavigationItemSelectedListener(navListener);
+        if (display_mode == Configuration.ORIENTATION_PORTRAIT){
+            BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);
+            bottomNavigation.setOnNavigationItemSelectedListener(navListener);
+        }else{
+            NavigationView navigationView = findViewById(R.id.navigation_view_land);
+            navigationView.setNavigationItemSelectedListener(navViewListener);
+        }
         createNotificationChannel();
     }
 
@@ -125,6 +164,28 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, mag, Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+            BottomNavigationView navigation = findViewById(R.id.navigation_view);
+            navigation.setRotation(90f);
+            navigation.getLayoutParams().width=480;
+            navigation.requestLayout();
+            navigation.setY(600f);
+            navigation.setX(-435f);
+            // navigation.requestLayout();
+            BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
+            for (int i = 0; i < menuView.getChildCount(); i++) {
+                final View iconView = menuView.getChildAt(i);
+                iconView.setRotation(-90f);
+            }
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            recreate();
+        }
     }
 
     @Override

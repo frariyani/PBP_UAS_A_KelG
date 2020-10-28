@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +67,7 @@ public class ProfileFragment extends Fragment{
     private ImageView avatarIv;
     private TextView namaTv, usernameTv, emailTv, notelpTv, alamatTv;
     private MaterialButton logoutBtn;
+    private ImageButton editBtn;
 
     //upload avatar
     private Uri PickedImgUri;
@@ -104,13 +107,26 @@ public class ProfileFragment extends Fragment{
         //init loading dialog
         loadingDialog = new LoadingDialog(getActivity());
 
-        getDataFromFirebase();
 
-        logoutBtn = view.findViewById(R.id.logout_button);
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
+
+        getDataFromFirebase();
+        int display_mode = getResources().getConfiguration().orientation;
+        if (display_mode == Configuration.ORIENTATION_PORTRAIT){
+            logoutBtn = view.findViewById(R.id.logout_button);
+            logoutBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    auth.signOut();
+                }
+            });
+        }
+
+        editBtn = view.findViewById(R.id.editButton);
+        editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                auth.signOut();
+            public void onClick(View views) {
+                Intent i = new Intent(getView().getContext(), EditActivity.class);
+                startActivity(i);
             }
         });
 
@@ -308,6 +324,8 @@ public class ProfileFragment extends Fragment{
                     String nama = ""+ds.child("nama").getValue();
                     String notelp = ""+ds.child("notelp").getValue();
                     String username = ""+ds.child("username").getValue();
+
+
 
                     //set data yang akan ditampilkan di profil
                     namaTv.setText(nama);

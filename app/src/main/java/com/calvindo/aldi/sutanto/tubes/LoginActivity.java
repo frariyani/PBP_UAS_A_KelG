@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 loginUserAccount();
-                createNotification();
                 addNotification();
             }
         });
@@ -112,9 +111,15 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
+                            //Check if email verified
+                            if (auth.getCurrentUser().isEmailVerified()){
+                                createNotification();
+                                Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
+                            }else {
+                                Toast.makeText(LoginActivity.this, "Please verify your email!", Toast.LENGTH_SHORT).show();
+                            }
                         }else{
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                         }

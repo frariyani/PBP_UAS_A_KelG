@@ -149,10 +149,6 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(RegisterActivity.this, "Register Successful", Toast.LENGTH_SHORT).show();
-                            //rootNode = FirebaseDatabase.getInstance();
-                            //reference = rootNode.getReference("User");
-
                             FirebaseUser firebaseUser = auth.getCurrentUser();
                             String uid = firebaseUser.getUid();
 
@@ -166,10 +162,34 @@ public class RegisterActivity extends AppCompatActivity {
                             hashMap.put("nama", editNama.getText().toString());
                             hashMap.put("Avatar_Images", "https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg"); //input di edit profile
 
-                            //store hashmap ke database
-                            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                            DatabaseReference reference = firebaseDatabase.getReference("User");
-                            reference.child(uid).setValue(hashMap);
+                            auth = FirebaseAuth.getInstance();
+                            auth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(RegisterActivity.this, "Register Successful! Please verify your email!", Toast.LENGTH_SHORT).show();
+
+                                        //set form to empty
+                                        editEmail.setText("");
+                                        editPassword.setText("");
+                                        editNama.setText("");
+                                        editUsername.setText("");
+                                        editNoTelp.setText("");
+                                        editAlamat.setText("");
+
+                                        //store hashmap ke database
+                                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                                        DatabaseReference reference = firebaseDatabase.getReference("User");
+                                        reference.child(uid).setValue(hashMap);
+                                    }else {
+                                        Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            //rootNode = FirebaseDatabase.getInstance();
+                            //reference = rootNode.getReference("User");
+
+
                         }else{
                             Toast.makeText(RegisterActivity.this, "Register Failed", Toast.LENGTH_SHORT).show();
                         }

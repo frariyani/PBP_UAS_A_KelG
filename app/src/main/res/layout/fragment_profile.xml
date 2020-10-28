@@ -27,19 +27,19 @@
         app:srcCompat="@drawable/userphoto" />
 
 
-        <TextView
-            android:id="@+id/namaView"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:text="TextView"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view3" />
+    <TextView
+        android:id="@+id/namaView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view3" />
 
     <ImageView
         android:id="@+id/image"
@@ -205,5 +205,17 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="206dp" />
 
+    <ImageButton
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="288dp"
+        android:layout_marginTop="204dp"
+        android:background="@color/colorPrimary"
+        android:padding="5sp"
+        android:tint="@color/design_default_color_on_primary"
+        app:layout_constraintStart_toStartOf="@+id/namaView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_create_24px" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

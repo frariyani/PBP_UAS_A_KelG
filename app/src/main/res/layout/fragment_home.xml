@@ -9,7 +9,7 @@
     <View
         android:id="@+id/top_view"
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_weight="1"
         android:background="@color/colorPrimary" />
     <View
@@ -20,9 +20,8 @@
         android:layout_weight="1"
         android:background="@drawable/ic_wave" />
     <LinearLayout
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="90dp"
         android:padding="30dp"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -30,6 +29,7 @@
             android:id="@+id/recyclerview_kost"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#fff"
             tools:listitem="@layout/cardview">
 
         </androidx.recyclerview.widget.RecyclerView>
@@ -44,7 +44,7 @@
         android:text="GMBKost"
         android:textColor="#fff"
         android:textSize="40dp"
-        android:layout_marginTop="30sp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="30sp"/>
 
     <TextView
@@ -52,7 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30sp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="70dp"
         android:fontFamily="sans-serif-condensed"
         android:text="Gahar Mantap Bauwangi"
         android:textColor="#fff"

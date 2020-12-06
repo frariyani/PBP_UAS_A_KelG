@@ -2,23 +2,16 @@ package com.calvindo.aldi.sutanto.tubes.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
-import com.calvindo.aldi.sutanto.tubes.FavoriteFragment;
-import com.calvindo.aldi.sutanto.tubes.HomeFragment;
 import com.calvindo.aldi.sutanto.tubes.KostOnMAP;
-import com.calvindo.aldi.sutanto.tubes.R;
-import com.calvindo.aldi.sutanto.tubes.databinding.CardviewBinding;
 import com.calvindo.aldi.sutanto.tubes.databinding.FavCardviewBinding;
 import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;

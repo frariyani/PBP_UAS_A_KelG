@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FavoriteFragment">
+    tools:context=".TransactionsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <View
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff"
-            tools:listitem="@layout/fav_cardview">
+            tools:listitem="@layout/item_transaksi">
 
         </androidx.recyclerview.widget.RecyclerView>
     </LinearLayout>

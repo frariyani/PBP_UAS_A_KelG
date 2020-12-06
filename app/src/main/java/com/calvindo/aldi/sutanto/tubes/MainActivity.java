@@ -2,23 +2,18 @@ package com.calvindo.aldi.sutanto.tubes;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,8 +24,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import static android.os.Build.VERSION_CODES.O;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         //memilih favFragment
                         case R.id.action_fav:
-                            selected = new FavoriteFragment();
+                            selected = new TransactionsFragment();
                             index = 1;
                             break;
                         //memilih profilFragment
@@ -86,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         //memilih favFragment
                         case R.id.action_fav:
-                            selected = new FavoriteFragment();
+                            selected = new TransactionsFragment();
                             index = 1;
                             break;
                         //memilih profilFragment

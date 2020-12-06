@@ -13,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -22,30 +23,7 @@
                     android:layout_alignParentLeft="true"
                     android:textSize="18dp"
                     android:textStyle="bold"
-                    android:text="Nama User"
-                    android:textColor="@android:color/black"/>
-                <TextView
-                    android:id="@+id/twNamaUser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="5dp"
-                    android:hint="Nama User"
-                    android:textAlignment="textEnd"
-                    android:textColor="@android:color/black"
-                    android:textSize="18dp"/>
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:text="Nama Kost"
+                    android:text="ID Kost"
                     android:textColor="@android:color/black"/>
                 <TextView
                     android:id="@+id/twNamaKost"
@@ -54,7 +32,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginEnd="5dp"
-                    android:hint="Nama Kost"
+                    android:hint="ID Kost"
                     android:textAlignment="textEnd"
                     android:textColor="@android:color/black"
                     android:textSize="18dp"/>
@@ -105,7 +83,15 @@
                     android:textColor="@android:color/black"
                     android:textSize="18dp"/>
             </RelativeLayout>
+            <com.google.android.material.button.MaterialButton
+                android:layout_margin="10dp"
+                android:id="@+id/btnEdit"
+                android:layout_gravity="center"
+                android:text="Ubah Durasi"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
+
 
 
 </com.google.android.material.card.MaterialCardView>

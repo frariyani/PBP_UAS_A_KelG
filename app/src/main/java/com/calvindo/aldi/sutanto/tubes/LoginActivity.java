@@ -11,8 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         //Membuat Intent yang menampilkan Notification
-        Intent notificationIntent = new Intent(this,FavoriteFragment.class);
+        Intent notificationIntent = new Intent(this, TransactionsFragment.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
 

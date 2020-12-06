@@ -66,4 +66,26 @@ public interface ApiInterface {
                                   @Field("gambar") String gambar);
     @DELETE("kost/{id}")
     Call<KostResponse> deleteKost(@Path("id")String id);
+
+    @GET("transaksi/{id}")
+    Call<TransaksiResponse> getAllTransaksi(@Path("id")String uid);
+
+    @POST("transaksi")
+    @FormUrlEncoded
+    Call<TransaksiResponse> createTransaksi(@Field("id_user")String id_user,
+                                            @Field("id_kost")String id_kost,
+                                            @Field("lama_sewa") int lama_sewa,
+                                            @Field("total_pembayaran") double total_pembayaran);
+
+    @PUT("transaksi/{id}")
+    @FormUrlEncoded
+    Call<TransaksiResponse> updateTransaksi(@Path("id")int id,
+                                            @Field("id_user")String id_user,
+                                            @Field("id_kost")String id_kost,
+                                            @Field("lama_sewa") int lama_sewa,
+                                            @Field("total_pembayaran") double total_pembayaran);
+
+    @DELETE("transaksi/{id}")
+    Call<TransaksiResponse> deleteKost(@Path("id")int id);
+
 }

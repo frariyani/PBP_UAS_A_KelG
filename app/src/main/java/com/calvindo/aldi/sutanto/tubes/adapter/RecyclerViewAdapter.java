@@ -1,40 +1,66 @@
 package com.calvindo.aldi.sutanto.tubes.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.calvindo.aldi.sutanto.tubes.API.ApiClient;
+import com.calvindo.aldi.sutanto.tubes.API.ApiInterface;
+import com.calvindo.aldi.sutanto.tubes.API.TransaksiResponse;
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
+import com.calvindo.aldi.sutanto.tubes.Database.KostClientAccess;
 import com.calvindo.aldi.sutanto.tubes.KostOnMAP;
+import com.calvindo.aldi.sutanto.tubes.R;
 import com.calvindo.aldi.sutanto.tubes.databinding.CardviewBinding;
 import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
+import com.calvindo.aldi.sutanto.tubes.models.Transactions;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
     private static final String TAG = "RecyclerViewAdapter";
 
-    List<Kost> mData;
+    List<KostClientAccess> mData;
     private Context mContext;
+    private final String[] saLamaSewa = new String[]{"1", "2", "3", "4", "5"};
+    private AutoCompleteTextView edLamaSewa;
+    private int lamaSewa = 1;
+//    private KostClientAccess kost;
 
-    private String uid;
+    private String uid, id_transaksi;
 
     //Firebase
     private FirebaseAuth auth;
     private FirebaseUser user;
 
-    public RecyclerViewAdapter(Context context, List<Kost> mData) {
+    public RecyclerViewAdapter(Context context, List<KostClientAccess> mData) {
         this.mContext = context;
         this.mData = mData;
         notifyDataSetChanged();
@@ -44,18 +70,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        CardviewBinding cardviewBinding = CardviewBinding.inflate(layoutInflater, parent, false);
+        View view = layoutInflater.inflate(R.layout.cardview, parent, false);
+//        mContext = parent.getContext();
 
 //        SharedPreferences sharedPreferences = mContext.getSharedPreferences("pref", Context.MODE_PRIVATE);
 
-        return new MyViewHolder(cardviewBinding);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        final Kost kost = mData.get(position);
-        holder.cardviewBinding.setKost(kost);
-        holder.cardviewBinding.executePendingBindings();
+        final KostClientAccess kost = mData.get(position);
+
+        holder.nama.setText(kost.getNama_kost());
+        holder.alamat.setText(kost.getAlamat());
+        holder.cost.setText(kost.getHarga_sewa());
+        Glide.with(mContext)
+                .load("https://cdn.discordapp.com/attachments/548704072073609226/785217785735151646/qINR2TfT_400x400.jpg")
+                .apply(new RequestOptions().override(100, 150))
+                .into(holder.image);
+
     }
 
     @Override
@@ -63,110 +97,135 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return mData.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
-        String nama,kota,alamat,latitude,longitude,hp,image;
-        int status, id;
-        double cost;
-        CardviewBinding cardviewBinding;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView nama, kota, alamat, latitude, longitude, hp, cost;
+        ImageView image;
+        int status;
+        String id;
+        double totalBayar;
 
-        public MyViewHolder(@NonNull CardviewBinding cardviewBinding) {
+        public MyViewHolder(@NonNull View itemView) {
 
-            super(cardviewBinding.getRoot());
-            this.cardviewBinding = cardviewBinding;
+            super(itemView);
             auth = FirebaseAuth.getInstance();
             user = auth.getCurrentUser();
 
-            cardviewBinding.btnFav.setOnClickListener(new View.OnClickListener() {
+            nama = itemView.findViewById(R.id.nama_kost);
+            alamat = itemView.findViewById(R.id.namakota);
+            hp = itemView.findViewById(R.id.noHPOwner);
+            cost = itemView.findViewById(R.id.cost);
+            image = itemView.findViewById(R.id.kota_image);
+//            Glide.with(getActivity())
+//                    .load(avatar)
+//                    .apply(RequestOptions.circleCropTransform())
+//                    .into(avatarIv);
+
+//            btnFav.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.d(TAG, "onClick: " + mData.get(getAdapterPosition()));
+//
+//                    nama = mData.get(getAdapterPosition()).getNama_kost();
+//                    alamat = mData.get(getAdapterPosition()).getAlamat();
+//                    latitude = mData.get(getAdapterPosition()).getLatitude();
+//                    longitude = mData.get(getAdapterPosition()).getLongitude();
+//
+//                    cost = mData.get(getAdapterPosition()).getHarga_sewa();
+//                    uid = user.getUid();
+//                }
+//            });
+//
+//            cardviewBinding.btnMap.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    latitude = mData.get(getAdapterPosition()).getLatitude();
+//                    longitude = mData.get(getAdapterPosition()).getLongitude();
+//                    Intent intent = new Intent(view.getContext(), KostOnMAP.class);
+//                    intent.putExtra("LONGITUDE", longitude);
+//                    intent.putExtra("LATITUDE", latitude);
+//                    view.getContext().startActivity(intent);
+//                }
+//            });
+//
+//            cardviewBinding.btnBooking.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getRootView().getContext());
+//
+//                    View dialogV = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_booking, null);
+//
+//                    TextView namaKost = dialogV.findViewById(R.id.twNamaKost);
+//                    namaKost.setText(mData.get(getAdapterPosition()).getNama_kost());
+//                    edLamaSewa = dialogV.findViewById(R.id.edLamaSewa);
+//
+//                    builder.setView(dialogV);
+//                    builder.setCancelable(true);
+//                    builder.show();
+//
+//                    final ArrayAdapter<String> adapterSewa = new ArrayAdapter<>(mContext,
+//                            R.layout.dd_list, R.id.dd_list, saLamaSewa);
+//
+//                    edLamaSewa.setAdapter(adapterSewa);
+//                    edLamaSewa.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                            lamaSewa = Integer.parseInt(saLamaSewa[i]);
+//                            Log.i(TAG, "lama sewa : " + lamaSewa + "saLamaSewa :" + saLamaSewa[i]);
+//                        }
+//                    });
+//
+////                    int kost_id = mData.get(getAdapterPosition()).getId();
+//                    id = mData.get(getAdapterPosition()).getId();
+//
+//                    cost = mData.get(getAdapterPosition()).getHarga_sewa();
+//                    uid = user.getUid();
+//
+//                    totalBayar = lamaSewa * Double.parseDouble(cost);
+//                    Log.i(TAG, "total bayar: " + totalBayar + "lama sewa: " + lamaSewa + "cost: " + cost);
+//
+//
+//                    MaterialButton btnBooking = dialogV.findViewById(R.id.btnBooking);
+//
+//                    btnBooking.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            booking();
+//                            Log.i("Gagal Dab: ", "kepencet dab");
+//                        }
+//                    });
+//                }
+//            });
+        }
+
+
+
+        public void booking() {
+            ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+//TransaksiClientAccess(String id, String id_user, String id_kost, int lama_sewa, double total_pembayaran)
+            retrofit2.Call<TransaksiResponse> add = apiService.createTransaksi(
+                    uid,
+                    id,
+                    lamaSewa,
+                    totalBayar
+            );
+
+            add.enqueue(new Callback<TransaksiResponse>() {
                 @Override
-                public void onClick(View view) {
-                    Log.d(TAG,"onClick: " + mData.get(getAdapterPosition()) );
+                public void onResponse(Call<TransaksiResponse> call, Response<TransaksiResponse> response) {
+//                    Toast.makeText(mContext, "uid: "+uid+
+//                                                  "id_kost: "+id+
+//                                                  "lama sewa: "+lamaSewa+
+//                                                  "total bayar: "+totalBayar, Toast.LENGTH_LONG).show();
+                    Log.i("Quda : ", "Masuk RESPONSE ," + response.body());
+                }
 
-                    id = mData.get(getAdapterPosition()).getId();
-                    nama = mData.get(getAdapterPosition()).getName();
-                    alamat = mData.get(getAdapterPosition()).getAlamat();
-                    kota = mData.get(getAdapterPosition()).getKota();
-                    latitude = mData.get(getAdapterPosition()).getLatitude();
-                    longitude = mData.get(getAdapterPosition()).getLongitude();
-                    hp = mData.get(getAdapterPosition()).getHPOwner();
-                    cost = mData.get(getAdapterPosition()).getCost();
-                    image = mData.get(getAdapterPosition()).getImage();
-                    uid = user.getUid();
-
-                    if (mData.get(getAdapterPosition()).getStatus() == 0){
-                        mData.get(getAdapterPosition()).setStatus(1);
-                        status = mData.get(getAdapterPosition()).getStatus();
-                        update(id,1);
-                        insert();
-                        Toast toast = Toast.makeText(view.getContext(), "Successfully added to favorite", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }else {
-                        mData.get(getAdapterPosition()).setStatus(0);
-                        status = mData.get(getAdapterPosition()).getStatus();
-                        update(id,0);
-                        delete(id, uid, status);
-                        Toast toast = Toast.makeText(view.getContext(), "Successfully removed to favorite", Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
+                @Override
+                public void onFailure(Call<TransaksiResponse> call, Throwable t) {
+                    Log.i("Gagal: ", t.getMessage());
                 }
             });
-
-            cardviewBinding.btnMap.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    latitude = mData.get(getAdapterPosition()).getLatitude();
-                    longitude = mData.get(getAdapterPosition()).getLongitude();
-                    Intent intent = new Intent(view.getContext(), KostOnMAP.class);
-                    intent.putExtra("LONGITUDE", longitude);
-                    intent.putExtra("LATITUDE", latitude);
-                    view.getContext().startActivity(intent);
-                }
-            });
         }
 
-        public void update(final int id, final int status){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Kost kost = DatabaseClient.getInstance(mContext)
-                            .getDatabase().kostDAO().findkostbyid(id);
 
-                    kost.setStatus(status);
-
-                    DatabaseClient.getInstance(mContext).getDatabase()
-                            .kostDAO().update(kost);
-                }
-            }).start();
-        }
-        public void insert(){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Favorites cekFav = DatabaseClient.getInstance(mContext)
-                            .getDatabase().favDAO().fav(id,uid);
-
-                    if (cekFav==null){
-                        Favorites favorites = new Favorites(id, uid, nama, kota, alamat, latitude,
-                                longitude, hp, cost, image, 1);
-                        DatabaseClient.getInstance(mContext).getDatabase()
-                                .favDAO().insert(favorites);
-                    }
-                }
-            }).start();
-        }
-
-        public void delete(final int id, String uid , final int status){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Favorites cekFav = DatabaseClient.getInstance(mContext)
-                            .getDatabase().favDAO().fav(id,uid);
-
-                    if (cekFav!=null){
-                        DatabaseClient.getInstance(mContext).getDatabase()
-                                .favDAO().delete(cekFav);
-                    }
-                }
-            }).start();
-        }
     }
 }

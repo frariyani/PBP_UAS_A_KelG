@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
 //import com.calvindo.aldi.sutanto.tubes.UnitTest.LoginActivity;
+import com.calvindo.aldi.sutanto.tubes.models.Transactions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -105,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         //Membuat Intent yang menampilkan Notification
-        Intent notificationIntent = new Intent(this,FavoriteFragment.class);
+        Intent notificationIntent = new Intent(this, TransactionsFragment.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
 

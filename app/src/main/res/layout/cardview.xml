@@ -2,11 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="kost"
-            type="com.calvindo.aldi.sutanto.tubes.models.Kost" />
-    </data>
+
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,8 +20,7 @@
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
-                android:background="#2d2d2d"
-                android:loadImage="@{kost.image}"/>
+                android:background="#2d2d2d" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -40,7 +35,6 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:textSize="16sp"
-                        android:text="@{kost.name}"
                         android:textStyle="bold"
                         android:textColor="#000"/>
 
@@ -61,7 +55,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:textSize="13sp"
-                    android:text="@{kost.kota}"
                     android:textColor="#000"/>
 
                 <TextView
@@ -70,7 +63,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:textSize="13sp"
-                    android:text="@{kost.HPOwner}"
                     android:textColor="#000"/>
                 <TextView
                     android:id="@+id/cost"
@@ -78,7 +70,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:textSize="13sp"
-                    android:text="@{String.valueOf(kost.cost)}"
                     android:textColor="#000"/>
 
                 <LinearLayout
@@ -90,6 +81,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="View map"
+                        android:textSize="12sp"/>
+                    <Button
+                        android:id="@+id/btn_booking"
+                        android:layout_margin="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Booking"
                         android:textSize="12sp"/>
 
                 </LinearLayout>

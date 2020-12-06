@@ -1,0 +1,657 @@
+Index: app/src/main/java/com/calvindo/aldi/sutanto/tubes/FavoriteFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.calvindo.aldi.sutanto.tubes;\r\n\r\nimport android.os.AsyncTask;\r\nimport android.os.Bundle;\r\n\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Button;\r\nimport android.widget.Toast;\r\n\r\nimport com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;\r\nimport com.calvindo.aldi.sutanto.tubes.adapter.FavoriteAdapter;\r\nimport com.calvindo.aldi.sutanto.tubes.databinding.FragmentFavoriteBinding;\r\nimport com.calvindo.aldi.sutanto.tubes.models.Favorites;\r\nimport com.calvindo.aldi.sutanto.tubes.models.Kost;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\n\r\nimport java.util.List;\r\n\r\n/**\r\n * A simple {@link Fragment} subclass.\r\n * Use the {@link FavoriteFragment#newInstance} factory method to\r\n * create an instance of this fragment.\r\n */\r\npublic class FavoriteFragment extends Fragment {\r\n\r\n    // TODO: Rename parameter arguments, choose names that match\r\n    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER\r\n    private static final String ARG_PARAM1 = \"param1\";\r\n    private static final String ARG_PARAM2 = \"param2\";\r\n\r\n    // TODO: Rename and change types of parameters\r\n    private String mParam1;\r\n    private String mParam2;\r\n    private RecyclerView myRecyclerView;\r\n    private FavoriteAdapter adapter;\r\n    private String uid;\r\n\r\n    //Firebase\r\n    private FirebaseAuth auth;\r\n    private FirebaseUser user;\r\n\r\n\r\n\r\n\r\n    public FavoriteFragment() {\r\n        // Required empty public constructor\r\n    }\r\n\r\n    /**\r\n     * Use this factory method to create a new instance of\r\n     * this fragment using the provided parameters.\r\n     *\r\n     * @param param1 Parameter 1.\r\n     * @param param2 Parameter 2.\r\n     * @return A new instance of fragment FavoriteFragment.\r\n     */\r\n    // TODO: Rename and change types and number of parameters\r\n    public static FavoriteFragment newInstance(String param1, String param2) {\r\n        FavoriteFragment fragment = new FavoriteFragment();\r\n        Bundle args = new Bundle();\r\n        args.putString(ARG_PARAM1, param1);\r\n        args.putString(ARG_PARAM2, param2);\r\n        fragment.setArguments(args);\r\n        return fragment;\r\n    }\r\n\r\n    @Override\r\n    public void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        if (getArguments() != null) {\r\n            mParam1 = getArguments().getString(ARG_PARAM1);\r\n            mParam2 = getArguments().getString(ARG_PARAM2);\r\n        }\r\n    }\r\n\r\n\r\n    public void getKost(){\r\n        auth = FirebaseAuth.getInstance();\r\n        user = auth.getCurrentUser();\r\n        uid = user.getUid();\r\n        class GetKost extends AsyncTask<Void,Void,List<Favorites>>{\r\n            @Override\r\n            protected List<Favorites> doInBackground(Void... voids) {\r\n                List<Favorites> favorites = DatabaseClient\r\n                        .getInstance(getContext())\r\n                        .getDatabase().favDAO().getAll(uid);\r\n                return favorites;\r\n            }\r\n            @Override\r\n            protected void onPostExecute(List<Favorites> favorites) {\r\n                super.onPostExecute(favorites);\r\n                if (favorites.isEmpty()){\r\n                    Toast.makeText(getContext(), \"Empty List \", Toast.LENGTH_SHORT).show();\r\n                }else {\r\n                    adapter = new FavoriteAdapter(getContext(), favorites);\r\n                    myRecyclerView.setAdapter(adapter);\r\n                }\r\n            }\r\n        }\r\n\r\n        GetKost get = new GetKost();\r\n        get.execute();\r\n    }\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        // Inflate the layout for this fragment\r\n        View v = inflater.inflate(R.layout.fragment_favorite, container, false);\r\n        FragmentFavoriteBinding fragmentFavoriteBinding = FragmentFavoriteBinding.inflate(getLayoutInflater());\r\n        myRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_fav);\r\n        myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));\r\n        getKost();\r\n        return v;\r\n\r\n\r\n    }\r\n}
+===================================================================
+--- app/src/main/java/com/calvindo/aldi/sutanto/tubes/FavoriteFragment.java	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/java/com/calvindo/aldi/sutanto/tubes/TransactionsFragment.java	(date 1607264469245)
+@@ -10,14 +10,14 @@
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+-import android.widget.Button;
+ import android.widget.Toast;
+ 
+ import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
+ import com.calvindo.aldi.sutanto.tubes.adapter.FavoriteAdapter;
++import com.calvindo.aldi.sutanto.tubes.adapter.TransaksiAdapter;
+ import com.calvindo.aldi.sutanto.tubes.databinding.FragmentFavoriteBinding;
+ import com.calvindo.aldi.sutanto.tubes.models.Favorites;
+-import com.calvindo.aldi.sutanto.tubes.models.Kost;
++import com.calvindo.aldi.sutanto.tubes.models.Transactions;
+ import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.auth.FirebaseUser;
+ 
+@@ -25,10 +25,10 @@
+ 
+ /**
+  * A simple {@link Fragment} subclass.
+- * Use the {@link FavoriteFragment#newInstance} factory method to
++ * Use the {@link TransactionsFragment#newInstance} factory method to
+  * create an instance of this fragment.
+  */
+-public class FavoriteFragment extends Fragment {
++public class TransactionsFragment extends Fragment {
+ 
+     // TODO: Rename parameter arguments, choose names that match
+     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+@@ -38,9 +38,10 @@
+     // TODO: Rename and change types of parameters
+     private String mParam1;
+     private String mParam2;
+-    private RecyclerView myRecyclerView;
+-    private FavoriteAdapter adapter;
++    private RecyclerView rv;
++    private TransaksiAdapter adapter;
+     private String uid;
++    private List<Transactions> transactions;
+ 
+     //Firebase
+     private FirebaseAuth auth;
+@@ -49,7 +50,7 @@
+ 
+ 
+ 
+-    public FavoriteFragment() {
++    public TransactionsFragment() {
+         // Required empty public constructor
+     }
+ 
+@@ -62,8 +63,8 @@
+      * @return A new instance of fragment FavoriteFragment.
+      */
+     // TODO: Rename and change types and number of parameters
+-    public static FavoriteFragment newInstance(String param1, String param2) {
+-        FavoriteFragment fragment = new FavoriteFragment();
++    public static TransactionsFragment newInstance(String param1, String param2) {
++        TransactionsFragment fragment = new TransactionsFragment();
+         Bundle args = new Bundle();
+         args.putString(ARG_PARAM1, param1);
+         args.putString(ARG_PARAM2, param2);
+@@ -85,22 +86,22 @@
+         auth = FirebaseAuth.getInstance();
+         user = auth.getCurrentUser();
+         uid = user.getUid();
+-        class GetKost extends AsyncTask<Void,Void,List<Favorites>>{
++        class GetKost extends AsyncTask<Void,Void,List<Transactions>>{
+             @Override
+-            protected List<Favorites> doInBackground(Void... voids) {
+-                List<Favorites> favorites = DatabaseClient
++            protected List<Transactions> doInBackground(Void... voids) {
++                List<Transactions> transactions = DatabaseClient
+                         .getInstance(getContext())
+-                        .getDatabase().favDAO().getAll(uid);
+-                return favorites;
++                        .getDatabase().transDAO().getAll(uid);
++                return transactions;
+             }
+             @Override
+-            protected void onPostExecute(List<Favorites> favorites) {
+-                super.onPostExecute(favorites);
+-                if (favorites.isEmpty()){
++            protected void onPostExecute(List<Transactions> transactions) {
++                super.onPostExecute(transactions);
++                if (transactions.isEmpty()){
+                     Toast.makeText(getContext(), "Empty List ", Toast.LENGTH_SHORT).show();
+                 }else {
+-                    adapter = new FavoriteAdapter(getContext(), favorites);
+-                    myRecyclerView.setAdapter(adapter);
++                    adapter = new TransaksiAdapter(getContext(), transactions);
++                    rv.setAdapter(adapter);
+                 }
+             }
+         }
+@@ -114,9 +115,16 @@
+                              Bundle savedInstanceState) {
+         // Inflate the layout for this fragment
+         View v = inflater.inflate(R.layout.fragment_favorite, container, false);
+-        FragmentFavoriteBinding fragmentFavoriteBinding = FragmentFavoriteBinding.inflate(getLayoutInflater());
+-        myRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_fav);
+-        myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
++//        FragmentFavoriteBinding fragmentFavoriteBinding = FragmentFavoriteBinding.inflate(getLayoutInflater());
++//        myRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_fav);
++//        myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
++
++        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
++        TransaksiAdapter adapter = new TransaksiAdapter(getContext(), transactions);
++
++        rv = v.findViewById(R.id.recyclerview_fav);
++        rv.setLayoutManager(new LinearLayoutManager(getContext()));
++
+         getKost();
+         return v;
+ 
+Index: app/src/main/java/com/calvindo/aldi/sutanto/tubes/models/ListKost.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.calvindo.aldi.sutanto.tubes.models;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class ListKost {\r\n    public ArrayList<Kost> ListKost;\r\n\r\n    public ListKost(){\r\n        ListKost = new ArrayList<>();\r\n        ListKost.add(new Kost(\"Kost Premium\", \"Gombong\",\r\n                \"Jl. Potongan\", \"-7.607468\", \"109.515752\", \"082112134121\",\r\n                2000000.00 , \"https://pbs.twimg.com/media/EjuODzyVkAAaMNT?format=jpg&name=large\", 0));\r\n        ListKost.add(new Kost(\"Kost Pertamax\", \"Yogyakarta\",\r\n                \"Jl. Potongan\", \"-7.607468\", \"109.515752\", \"082152134121\",\r\n                3000000.00 , \"https://pbs.twimg.com/media/EjuOb1YVcAEh__k?format=jpg&name=900x900\",0));\r\n        ListKost.add(new Kost(\"Kost Pertamax\", \"Yogyakarta\",\r\n                \"Jl. Potongan\", \"-7.607468\", \"109.515752\", \"082152134121\",\r\n                3000000.00 , \"https://pbs.twimg.com/media/EjuOeDTUYAEkWVc?format=jpg&name=medium\",0));\r\n        ListKost.add(new Kost(\"Kost Pertamax\", \"Yogyakarta\",\r\n                \"Jl. Potongan\", \"-7.607468\", \"109.515752\", \"082152134121\",\r\n                3000000.00 , \"https://pbs.twimg.com/media/EjuOhDEVkAA1Nrv?format=jpg&name=small\",0));\r\n        ListKost.add(new Kost(\"Kost Pertamax\", \"Yogyakarta\",\r\n                \"Jl. Potongan\", \"-7.607468\", \"109.515752\", \"082152134121\",\r\n                3000000.00 , \"https://pbs.twimg.com/media/EjuOjU5VkAAETkt?format=jpg&name=900x900\",0));\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/calvindo/aldi/sutanto/tubes/models/ListKost.java	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/java/com/calvindo/aldi/sutanto/tubes/models/ListKost.java	(date 1607260834784)
+@@ -9,18 +9,18 @@
+         ListKost = new ArrayList<>();
+         ListKost.add(new Kost("Kost Premium", "Gombong",
+                 "Jl. Potongan", "-7.607468", "109.515752", "082112134121",
+-                2000000.00 , "https://pbs.twimg.com/media/EjuODzyVkAAaMNT?format=jpg&name=large", 0));
++                2000d , "https://pbs.twimg.com/media/EjuODzyVkAAaMNT?format=jpg&name=large", 0));
+         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
+                 "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
+-                3000000.00 , "https://pbs.twimg.com/media/EjuOb1YVcAEh__k?format=jpg&name=900x900",0));
++                3000d , "https://pbs.twimg.com/media/EjuOb1YVcAEh__k?format=jpg&name=900x900",0));
+         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
+                 "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
+-                3000000.00 , "https://pbs.twimg.com/media/EjuOeDTUYAEkWVc?format=jpg&name=medium",0));
++                3000d , "https://pbs.twimg.com/media/EjuOeDTUYAEkWVc?format=jpg&name=medium",0));
+         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
+                 "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
+-                3000000.00 , "https://pbs.twimg.com/media/EjuOhDEVkAA1Nrv?format=jpg&name=small",0));
++                3000d , "https://pbs.twimg.com/media/EjuOhDEVkAA1Nrv?format=jpg&name=small",0));
+         ListKost.add(new Kost("Kost Pertamax", "Yogyakarta",
+                 "Jl. Potongan", "-7.607468", "109.515752", "082152134121",
+-                3000000.00 , "https://pbs.twimg.com/media/EjuOjU5VkAAETkt?format=jpg&name=900x900",0));
++                3000d , "https://pbs.twimg.com/media/EjuOjU5VkAAETkt?format=jpg&name=900x900",0));
+     }
+ }
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.calvindo.aldi.sutanto.tubes\">\r\n\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@drawable/ic_gmbkost_icon\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:configChanges=\"orientation|screenSize|keyboardHidden\"\r\n        android:theme=\"@style/AppTheme\">\r\n        <activity android:name=\".SplashScreenActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity android:name=\".LoginActivity\" ></activity>\r\n        <activity android:name=\".RegisterActivity\" ></activity>\r\n        <activity android:name=\".MainActivity\" ></activity>\r\n        <activity android:name=\".KostOnMAP\" ></activity>\r\n        <activity android:name=\".EditActivity\" />\r\n\r\n        <service android:name=\".MessagingService\">\r\n            <intent-filter>\r\n                <action android:name=\"com.google.firebase.MESSAGING_EVENT\"/>\r\n            </intent-filter>\r\n        </service>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/AndroidManifest.xml	(date 1607245912044)
+@@ -10,12 +10,17 @@
+ 
+     <application
+         android:allowBackup="true"
++        android:configChanges="orientation|screenSize|keyboardHidden"
+         android:icon="@drawable/ic_gmbkost_icon"
+         android:label="@string/app_name"
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+-        android:configChanges="orientation|screenSize|keyboardHidden"
+         android:theme="@style/AppTheme">
++        <activity android:name=".ListTransaksiActivity" />
++        <activity android:name=".ListUserActivity" />
++        <activity android:name=".ListKostActivity" />
++        <activity android:name=".TambahKostActivity" />
++        <activity android:name=".DashboardActivity" />
+         <activity android:name=".SplashScreenActivity">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+@@ -23,15 +28,15 @@
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+-        <activity android:name=".LoginActivity" ></activity>
+-        <activity android:name=".RegisterActivity" ></activity>
+-        <activity android:name=".MainActivity" ></activity>
+-        <activity android:name=".KostOnMAP" ></activity>
++        <activity android:name=".LoginActivity" />
++        <activity android:name=".RegisterActivity" />
++        <activity android:name=".MainActivity" />
++        <activity android:name=".KostOnMAP" />
+         <activity android:name=".EditActivity" />
+ 
+         <service android:name=".MessagingService">
+             <intent-filter>
+-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
++                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+             </intent-filter>
+         </service>
+     </application>
+Index: app/src/main/java/com/calvindo/aldi/sutanto/tubes/RegisterActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.calvindo.aldi.sutanto.tubes;\r\n\r\nimport android.app.NotificationChannel;\r\nimport android.app.NotificationManager;\r\nimport android.app.PendingIntent;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.text.TextUtils;\r\nimport android.text.method.PasswordTransformationMethod;\r\nimport android.util.Patterns;\r\nimport android.view.View;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.app.NotificationCompat;\r\n\r\nimport com.calvindo.aldi.sutanto.tubes.models.User;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.android.material.button.MaterialButton;\r\nimport com.google.android.material.textfield.TextInputEditText;\r\nimport com.google.firebase.auth.AuthResult;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\nimport com.google.firebase.database.DatabaseReference;\r\nimport com.google.firebase.database.FirebaseDatabase;\r\n\r\nimport java.util.HashMap;\r\n\r\npublic class RegisterActivity extends AppCompatActivity {\r\n    private TextInputEditText editEmail, editPassword, editNama, editUsername, editNoTelp, editAlamat;\r\n    private MaterialButton registerBtn;\r\n    private FirebaseAuth auth;\r\n    private FirebaseDatabase rootNode;\r\n    private DatabaseReference reference;\r\n    private String getEmail, getPassword, getUsername, getNama, getNoTelp, getAlamat;\r\n    private TextView loginLink;\r\n    private String CHANNEL_ID = \"Channe 1\";\r\n\r\n    @Override\r\n    protected void onCreate(@Nullable Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_register);\r\n\r\n        //init edit text\r\n        editEmail = findViewById(R.id.input_email);\r\n        editPassword = findViewById(R.id.input_password);\r\n        editNama = findViewById(R.id.input_nama);\r\n        editUsername = findViewById(R.id.input_username);\r\n        editNoTelp = findViewById(R.id.input_notelp);\r\n        editAlamat = findViewById(R.id.input_alamat);\r\n\r\n        auth = FirebaseAuth.getInstance();\r\n\r\n        editPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());\r\n\r\n        registerBtn = findViewById(R.id.register_button);\r\n        registerBtn.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                if(isDataValid()){\r\n                    createUserAccount();\r\n                    createNotification();\r\n                    addNotification();\r\n                }\r\n            }\r\n        });\r\n\r\n        loginLink = findViewById(R.id.login_link);\r\n        loginLink.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);\r\n                startActivity(i);\r\n                finish();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void createNotification() {\r\n        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){\r\n            CharSequence name = \"Channel 1\";\r\n            String description = \"This is Channel 1\";\r\n            int importance = NotificationManager.IMPORTANCE_HIGH;\r\n            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);\r\n            channel.setDescription(description);\r\n\r\n            //notification for System after add kost\r\n            NotificationManager notificationManager = getSystemService(NotificationManager.class);\r\n            notificationManager.createNotificationChannel(channel);\r\n        }\r\n    }\r\n\r\n    private void addNotification(){\r\n        //Menambhakan Notif saat menambah favorit kost.\r\n        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);\r\n        builder.setSmallIcon(R.drawable.ic_launcher_background);\r\n        builder.setContentTitle(\"Register Berhasil\");\r\n        builder.setContentText(\"Selamat akun anda berhasil ditambahkan\");\r\n        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);\r\n\r\n        //Membuat Intent yang menampilkan Notification\r\n        Intent notificationIntent = new Intent(this,FavoriteFragment.class);\r\n        PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);\r\n        builder.setContentIntent(contentIntent);\r\n\r\n        //Menampilkamn Notifikasi\r\n        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);\r\n        manager.notify(0,builder.build());\r\n    }\r\n\r\n\r\n    private boolean isDataValid(){\r\n        getEmail = editEmail.getText().toString();\r\n        getPassword = editPassword.getText().toString();\r\n\r\n        if(TextUtils.isEmpty(getEmail) && TextUtils.isEmpty(getPassword)){\r\n            Toast.makeText(this, \"Authentication Failed\", Toast.LENGTH_SHORT).show();\r\n        }else if(!isEmailValid(getEmail)){\r\n            Toast.makeText(this, \"Email Invalid\", Toast.LENGTH_SHORT).show();\r\n        }else if(TextUtils.isEmpty(getPassword)){\r\n            Toast.makeText(this,\"Please Enter Password\", Toast.LENGTH_SHORT).show();\r\n        }else if(getPassword.length() < 6){\r\n            Toast.makeText(this, \"Password Too Short\", Toast.LENGTH_SHORT).show();\r\n        }else{\r\n            return true;\r\n        }\r\n        return false;\r\n    }\r\n\r\n    private boolean isEmailValid(String email){\r\n        if(!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()){\r\n            return true;\r\n        }else{\r\n            return false;\r\n        }\r\n    }\r\n\r\n    private void createUserAccount(){\r\n        getEmail = editEmail.getText().toString();\r\n        getPassword = editPassword.getText().toString();\r\n        auth.createUserWithEmailAndPassword(getEmail, getPassword)\r\n                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<AuthResult> task) {\r\n                        if(task.isSuccessful()){\r\n                            FirebaseUser firebaseUser = auth.getCurrentUser();\r\n                            String uid = firebaseUser.getUid();\r\n\r\n                            HashMap<Object, String> hashMap = new HashMap<>();\r\n\r\n                            hashMap.put(\"uid\", uid);\r\n                            hashMap.put(\"email\",  editEmail.getText().toString());\r\n                            hashMap.put(\"username\", editUsername.getText().toString());\r\n                            hashMap.put(\"notelp\", editNoTelp.getText().toString());\r\n                            hashMap.put(\"alamat\", editAlamat.getText().toString());\r\n                            hashMap.put(\"nama\", editNama.getText().toString());\r\n                            hashMap.put(\"Avatar_Images\", \"https://cdn.jpegmini.com/user/images/slider_puffin_before_mobile.jpg\"); //input di edit profile\r\n\r\n                            auth = FirebaseAuth.getInstance();\r\n                            auth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {\r\n                                @Override\r\n                                public void onComplete(@NonNull Task<Void> task) {\r\n                                    if (task.isSuccessful()){\r\n                                        Toast.makeText(RegisterActivity.this, \"Register Successful! Please verify your email!\", Toast.LENGTH_SHORT).show();\r\n\r\n                                        //set form to empty\r\n                                        editEmail.setText(\"\");\r\n                                        editPassword.setText(\"\");\r\n                                        editNama.setText(\"\");\r\n                                        editUsername.setText(\"\");\r\n                                        editNoTelp.setText(\"\");\r\n                                        editAlamat.setText(\"\");\r\n\r\n                                        //store hashmap ke database\r\n                                        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();\r\n                                        DatabaseReference reference = firebaseDatabase.getReference(\"User\");\r\n                                        reference.child(uid).setValue(hashMap);\r\n                                    }else {\r\n                                        Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();\r\n                                    }\r\n                                }\r\n                            });\r\n                            //rootNode = FirebaseDatabase.getInstance();\r\n                            //reference = rootNode.getReference(\"User\");\r\n\r\n\r\n                        }else{\r\n                            Toast.makeText(RegisterActivity.this, \"Register Failed\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n\r\n    /*private void loginUserAccount() {\r\n        getEmail = editEmail.getText().toString();\r\n        getPassword = editPassword.getText().toString();\r\n        auth.signInWithEmailAndPassword(getEmail, getPassword)\r\n                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<AuthResult> task) {\r\n                        if (task.isSuccessful()) {\r\n                            Toast.makeText(RegisterActivity.this, \"Login Successful\", Toast.LENGTH_SHORT).show();\r\n                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));\r\n                        } else {\r\n                            Toast.makeText(RegisterActivity.this, \"Login Failed\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    }\r\n                });\r\n    }*/\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/calvindo/aldi/sutanto/tubes/RegisterActivity.java	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/java/com/calvindo/aldi/sutanto/tubes/RegisterActivity.java	(date 1607264024995)
+@@ -19,7 +19,6 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.core.app.NotificationCompat;
+ 
+-import com.calvindo.aldi.sutanto.tubes.models.User;
+ import com.google.android.gms.tasks.OnCompleteListener;
+ import com.google.android.gms.tasks.Task;
+ import com.google.android.material.button.MaterialButton;
+@@ -105,7 +104,7 @@
+         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+ 
+         //Membuat Intent yang menampilkan Notification
+-        Intent notificationIntent = new Intent(this,FavoriteFragment.class);
++        Intent notificationIntent = new Intent(this, TransactionsFragment.class);
+         PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+         builder.setContentIntent(contentIntent);
+ 
+Index: app/src/main/java/com/calvindo/aldi/sutanto/tubes/LoginActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.calvindo.aldi.sutanto.tubes;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.app.NotificationCompat;\r\n\r\nimport android.app.NotificationChannel;\r\nimport android.app.NotificationManager;\r\nimport android.app.PendingIntent;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.text.method.PasswordTransformationMethod;\r\nimport android.util.Log;\r\nimport android.view.View;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.android.material.button.MaterialButton;\r\nimport com.google.android.material.textfield.TextInputEditText;\r\nimport com.google.firebase.auth.AuthResult;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\n\r\nimport static android.os.Build.VERSION_CODES.O;\r\n\r\npublic class LoginActivity extends AppCompatActivity {\r\n    private TextInputEditText editEmail, editPassword;\r\n    private MaterialButton loginButton;\r\n    private FirebaseAuth auth;\r\n    private String getEmail, getPassword;\r\n    private TextView registerLink;\r\n    private String CHANNEL_ID = \"Channel 1\";\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_login);\r\n\r\n        //init edit text\r\n        editEmail = findViewById(R.id.login_email);\r\n        editPassword = findViewById(R.id.login_password);\r\n        //init material button\r\n        loginButton = findViewById(R.id.login_button);\r\n        //init register link\r\n        registerLink = findViewById(R.id.register_link);\r\n\r\n        //init firebase authentication\r\n        auth = FirebaseAuth.getInstance();\r\n\r\n        //editPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());\r\n\r\n        //dari login ke register\r\n        registerLink.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);\r\n                startActivity(i);\r\n                finish();\r\n            }\r\n        });\r\n\r\n        loginButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                loginUserAccount();\r\n                addNotification();\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    private void addNotification() {\r\n        if(Build.VERSION.SDK_INT >= O){\r\n            CharSequence name = \"Channel 1\";\r\n            String description = \"This is Channel 1\";\r\n            int importance = NotificationManager.IMPORTANCE_HIGH;\r\n            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);\r\n            channel.setDescription(description);\r\n\r\n            //notification for System after add kost\r\n            NotificationManager notificationManager = getSystemService(NotificationManager.class);\r\n            notificationManager.createNotificationChannel(channel);\r\n        }\r\n    }\r\n\r\n    private void createNotification() {\r\n        //Menambhakan Notif saat menambah favorit kost.\r\n        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);\r\n        builder.setSmallIcon(R.drawable.ic_launcher_background);\r\n        builder.setContentTitle(\"Welcome\");\r\n        builder.setContentText(\"Selamat Datang di Aplikasi kami.\");\r\n        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);\r\n\r\n        //Membuat Intent yang menampilkan Notification\r\n        Intent notificationIntent = new Intent(this,FavoriteFragment.class);\r\n        PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);\r\n        builder.setContentIntent(contentIntent);\r\n\r\n        //Menampilkamn Notifikasi\r\n        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);\r\n        manager.notify(0,builder.build());\r\n    }\r\n\r\n    private void loginUserAccount(){\r\n        getEmail = editEmail.getText().toString();\r\n        getPassword = editPassword.getText().toString();\r\n        auth.signInWithEmailAndPassword(getEmail, getPassword)\r\n                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<AuthResult> task) {\r\n                        if(task.isSuccessful()){\r\n                            //Check if email verified\r\n                            if(auth.getCurrentUser().getEmail().equalsIgnoreCase(\"admin@admin.com\")){\r\n                                Intent i = new Intent(LoginActivity.this, DashboardActivity.class);\r\n                                finish();\r\n                                startActivity(i);\r\n                            }\r\n                            else if (auth.getCurrentUser().isEmailVerified()){\r\n                                createNotification();\r\n                                Toast.makeText(LoginActivity.this, \"Login Successfull\", Toast.LENGTH_SHORT).show();\r\n                                startActivity(new Intent(LoginActivity.this, MainActivity.class));\r\n                                finish();\r\n                            }else {\r\n                                Toast.makeText(LoginActivity.this, \"Please verify your email!\", Toast.LENGTH_SHORT).show();\r\n                            }\r\n                        }else{\r\n                            Toast.makeText(LoginActivity.this, \"Login Failed\", Toast.LENGTH_SHORT).show();\r\n                        }\r\n                    }\r\n                });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/calvindo/aldi/sutanto/tubes/LoginActivity.java	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/java/com/calvindo/aldi/sutanto/tubes/LoginActivity.java	(date 1607264024970)
+@@ -11,8 +11,6 @@
+ import android.content.Intent;
+ import android.os.Build;
+ import android.os.Bundle;
+-import android.text.method.PasswordTransformationMethod;
+-import android.util.Log;
+ import android.view.View;
+ import android.widget.TextView;
+ import android.widget.Toast;
+@@ -95,7 +93,7 @@
+         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+ 
+         //Membuat Intent yang menampilkan Notification
+-        Intent notificationIntent = new Intent(this,FavoriteFragment.class);
++        Intent notificationIntent = new Intent(this, TransactionsFragment.class);
+         PendingIntent contentIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+         builder.setContentIntent(contentIntent);
+ 
+Index: app/src/main/java/com/calvindo/aldi/sutanto/tubes/adapter/FavoriteAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.calvindo.aldi.sutanto.tubes.adapter;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.os.AsyncTask;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;\r\nimport com.calvindo.aldi.sutanto.tubes.FavoriteFragment;\r\nimport com.calvindo.aldi.sutanto.tubes.HomeFragment;\r\nimport com.calvindo.aldi.sutanto.tubes.KostOnMAP;\r\nimport com.calvindo.aldi.sutanto.tubes.R;\r\nimport com.calvindo.aldi.sutanto.tubes.databinding.CardviewBinding;\r\nimport com.calvindo.aldi.sutanto.tubes.databinding.FavCardviewBinding;\r\nimport com.calvindo.aldi.sutanto.tubes.models.Favorites;\r\nimport com.calvindo.aldi.sutanto.tubes.models.Kost;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\n\r\nimport java.util.List;\r\n\r\npublic class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.MyViewHolder> {\r\n    private static final String TAG = \"RecyclerViewAdapter\";\r\n    private int id;\r\n    List<Kost> mData;\r\n    List<Favorites> fav;\r\n    private Context mContext;\r\n\r\n    private String uid;\r\n\r\n    //Firebase\r\n    private FirebaseAuth auth;\r\n    private FirebaseUser user;\r\n\r\n    public FavoriteAdapter(Context context, List<Favorites> fav) {\r\n        this.mContext = context;\r\n        this.fav = fav;\r\n        notifyDataSetChanged();\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());\r\n        FavCardviewBinding favCardviewBinding = FavCardviewBinding.inflate(layoutInflater, parent, false);\r\n\r\n//        SharedPreferences sharedPreferences = mContext.getSharedPreferences(\"pref\", Context.MODE_PRIVATE);\r\n\r\n        return new MyViewHolder(favCardviewBinding);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {\r\n        final Favorites favorites = fav.get(position);\r\n        holder.favCardviewBinding.setFav(favorites);\r\n        holder.favCardviewBinding.executePendingBindings();\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return fav.size();\r\n    }\r\n\r\n    class MyViewHolder extends RecyclerView.ViewHolder{\r\n        String nama,kota,alamat,latitude,longitude,hp,image;\r\n        int status;\r\n        double cost;\r\n        FavCardviewBinding favCardviewBinding;\r\n\r\n        public MyViewHolder(@NonNull FavCardviewBinding favCardviewBinding) {\r\n\r\n            super(favCardviewBinding.getRoot());\r\n            this.favCardviewBinding = favCardviewBinding;\r\n            auth = FirebaseAuth.getInstance();\r\n            user = auth.getCurrentUser();\r\n\r\n\r\n            favCardviewBinding.btnFav.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View view) {\r\n                    id = fav.get(getAdapterPosition()).getIdkost();\r\n                    uid = user.getUid();\r\n                    if (fav.get(getAdapterPosition()).getStatus() == 0){\r\n                        fav.get(getAdapterPosition()).setStatus(1);\r\n                        status = fav.get(getAdapterPosition()).getStatus();\r\n                        update(id,1);\r\n                        Toast toast = Toast.makeText(view.getContext(), \"Successfully added to favorite\", Toast.LENGTH_SHORT);\r\n                        toast.show();\r\n                    }else {\r\n//                        mData.get(getAdapterPosition()).setStatus(0);\r\n//                        status = mData.get(getAdapterPosition()).getStatus();\r\n                        update(id,0);\r\n                        delete(id,uid);\r\n                        Toast toast = Toast.makeText(view.getContext(), \"Successfully removed to favorite\", Toast.LENGTH_SHORT);\r\n                        toast.show();\r\n                    }\r\n                }\r\n            });\r\n\r\n            favCardviewBinding.btnMap.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View view) {\r\n                    latitude = fav.get(getAdapterPosition()).getLatitude();\r\n                    longitude = fav.get(getAdapterPosition()).getLongitude();\r\n                    Intent intent = new Intent(view.getContext(), KostOnMAP.class);\r\n                    intent.putExtra(\"LONGITUDE\", longitude);\r\n                    intent.putExtra(\"LATITUDE\", latitude);\r\n                    view.getContext().startActivity(intent);\r\n                }\r\n            });\r\n        }\r\n        public void update(final int id, final int status){\r\n            new Thread(new Runnable() {\r\n                @Override\r\n                public void run() {\r\n                    Kost kost = DatabaseClient.getInstance(mContext)\r\n                            .getDatabase().kostDAO().findkostbyid(id);\r\n\r\n                    kost.setStatus(status);\r\n\r\n                    DatabaseClient.getInstance(mContext).getDatabase()\r\n                            .kostDAO().update(kost);\r\n                }\r\n            }).start();\r\n        }\r\n\r\n        public void delete(final int id, String uid){\r\n            new Thread(new Runnable() {\r\n                @Override\r\n                public void run() {\r\n                    Favorites cekFav = DatabaseClient.getInstance(mContext)\r\n                            .getDatabase().favDAO().fav(id,uid);\r\n\r\n                    DatabaseClient.getInstance(mContext).getDatabase()\r\n                            .favDAO().delete(cekFav);\r\n                }\r\n            }).start();\r\n        }\r\n\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/calvindo/aldi/sutanto/tubes/adapter/FavoriteAdapter.java	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/java/com/calvindo/aldi/sutanto/tubes/adapter/FavoriteAdapter.java	(date 1607264025006)
+@@ -2,23 +2,16 @@
+ 
+ import android.content.Context;
+ import android.content.Intent;
+-import android.os.AsyncTask;
+-import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+ import android.widget.Toast;
+ 
+ import androidx.annotation.NonNull;
+-import androidx.fragment.app.Fragment;
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+ import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
+-import com.calvindo.aldi.sutanto.tubes.FavoriteFragment;
+-import com.calvindo.aldi.sutanto.tubes.HomeFragment;
+ import com.calvindo.aldi.sutanto.tubes.KostOnMAP;
+-import com.calvindo.aldi.sutanto.tubes.R;
+-import com.calvindo.aldi.sutanto.tubes.databinding.CardviewBinding;
+ import com.calvindo.aldi.sutanto.tubes.databinding.FavCardviewBinding;
+ import com.calvindo.aldi.sutanto.tubes.models.Favorites;
+ import com.calvindo.aldi.sutanto.tubes.models.Kost;
+Index: app/src/main/java/com/calvindo/aldi/sutanto/tubes/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.calvindo.aldi.sutanto.tubes;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.app.NotificationCompat;\r\nimport androidx.fragment.app.Fragment;\r\n\r\nimport android.app.Activity;\r\nimport android.app.NotificationChannel;\r\nimport android.app.NotificationManager;\r\nimport android.app.PendingIntent;\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.content.SharedPreferences;\r\nimport android.content.res.Configuration;\r\nimport android.os.Build;\r\nimport android.os.Bundle;\r\nimport android.provider.MediaStore;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.Toast;\r\n\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.android.material.bottomnavigation.BottomNavigationMenuView;\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\r\nimport com.google.android.material.navigation.NavigationView;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\nimport com.google.firebase.messaging.FirebaseMessaging;\r\n\r\nimport static android.os.Build.VERSION_CODES.O;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    private SharedPreferences preferences;\r\n    public static final int mode = Activity.MODE_PRIVATE;\r\n\r\n    private FirebaseAuth.AuthStateListener authListener;\r\n    private FirebaseAuth auth;\r\n    private int index;\r\n\r\n    //Inisialisasi variabel navListener pada saat menu di click\r\n    private BottomNavigationView.OnNavigationItemSelectedListener navListener =\r\n            new BottomNavigationView.OnNavigationItemSelectedListener() {\r\n                @Override\r\n                public boolean onNavigationItemSelected(@NonNull MenuItem item) {\r\n                    Fragment selected = new HomeFragment();\r\n\r\n                    switch (item.getItemId()){\r\n                        //memilih homeFragment\r\n                        case R.id.action_home:\r\n                            selected = new HomeFragment();\r\n                            index = 0;\r\n                            break;\r\n                        //memilih favFragment\r\n                        case R.id.action_fav:\r\n                            selected = new FavoriteFragment();\r\n                            index = 1;\r\n                            break;\r\n                        //memilih profilFragment\r\n                        case R.id.action_profile:\r\n                            selected = new ProfileFragment();\r\n                            index = 2;\r\n                            break;\r\n                    }\r\n                    //mengubah fragment sesuai fragment yang di pilih\r\n                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment,\r\n                            selected).commit();\r\n                    return true;\r\n                }\r\n            };\r\n\r\n    private NavigationView.OnNavigationItemSelectedListener navViewListener =\r\n            new NavigationView.OnNavigationItemSelectedListener() {\r\n                @Override\r\n                public boolean onNavigationItemSelected(@NonNull MenuItem item) {\r\n                    Fragment selected = new HomeFragment();\r\n\r\n                    switch (item.getItemId()){\r\n                        //memilih homeFragment\r\n                        case R.id.action_home:\r\n                            selected = new HomeFragment();\r\n                            index = 0;\r\n                            break;\r\n                        //memilih favFragment\r\n                        case R.id.action_fav:\r\n                            selected = new FavoriteFragment();\r\n                            index = 1;\r\n                            break;\r\n                        //memilih profilFragment\r\n                        case R.id.action_profile:\r\n                            selected = new ProfileFragment();\r\n                            index = 2;\r\n                            break;\r\n                    }\r\n                    //mengubah fragment sesuai fragment yang di pilih\r\n                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment,\r\n                            selected).commit();\r\n                    return true;\r\n                }\r\n            };\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n        auth = FirebaseAuth.getInstance();\r\n        int display_mode = getResources().getConfiguration().orientation;\r\n\r\n        authListener = new FirebaseAuth.AuthStateListener() {\r\n            @Override\r\n            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {\r\n                FirebaseUser user = firebaseAuth.getCurrentUser();\r\n                if(user == null){\r\n                    startActivity(new Intent(MainActivity.this, RegisterActivity.class));\r\n                    finish();\r\n                }else if(auth.getCurrentUser().getEmail().equalsIgnoreCase(\"admin@admin.com\")){\r\n                    startActivity(new Intent(MainActivity.this, DashboardActivity.class));\r\n                    finish();\r\n                }\r\n            }\r\n        };\r\n\r\n\r\n        //set default layout dengan homeFragment\r\n\r\n        if(savedInstanceState != null) {\r\n            int currentTab = savedInstanceState.getInt(\"CurrentTab\", 0);\r\n            /* Set currently selected tab */\r\n        }else {\r\n            Fragment default_frag = new HomeFragment();\r\n            getSupportFragmentManager().beginTransaction().replace(R.id.fragment,\r\n                    default_frag).commit();\r\n        }\r\n        //memanggil fungsi bottom navigation ke dalam layout\r\n        if (display_mode == Configuration.ORIENTATION_PORTRAIT){\r\n            BottomNavigationView bottomNavigation = findViewById(R.id.navigation_view);\r\n            bottomNavigation.setOnNavigationItemSelectedListener(navListener);\r\n        }else{\r\n            NavigationView navigationView = findViewById(R.id.navigation_view_land);\r\n            navigationView.setNavigationItemSelectedListener(navViewListener);\r\n        }\r\n        createNotificationChannel();\r\n    }\r\n\r\n    private void createNotificationChannel(){\r\n        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){\r\n            String CHANNEL_ID = \"Channel 1\";\r\n            CharSequence name = \"Channel 1\";\r\n            String description = \"This is Channel 1\";\r\n            int importance = NotificationManager.IMPORTANCE_HIGH;\r\n            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);\r\n            channel.setDescription(description);\r\n            NotificationManager notificationManager = getSystemService(NotificationManager.class);\r\n            notificationManager.createNotificationChannel(channel);\r\n        }\r\n        FirebaseMessaging.getInstance().subscribeToTopic(\"news\")\r\n                .addOnCompleteListener(new OnCompleteListener<Void>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<Void> task) {\r\n                        String mag = \"Successful\";\r\n                        if(!task.isSuccessful()){\r\n                            mag = \"Failed\";\r\n                        }\r\n                        Toast.makeText(MainActivity.this, mag, Toast.LENGTH_SHORT).show();\r\n                    }\r\n                });\r\n    }\r\n\r\n    @Override\r\n    public void onConfigurationChanged(Configuration newConfig) {\r\n        super.onConfigurationChanged(newConfig);\r\n        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {\r\n            Toast.makeText(this, \"landscape\", Toast.LENGTH_SHORT).show();\r\n            BottomNavigationView navigation = findViewById(R.id.navigation_view);\r\n            navigation.setRotation(90f);\r\n            navigation.getLayoutParams().width=480;\r\n            navigation.requestLayout();\r\n            navigation.setY(600f);\r\n            navigation.setX(-435f);\r\n            // navigation.requestLayout();\r\n            BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);\r\n            for (int i = 0; i < menuView.getChildCount(); i++) {\r\n                final View iconView = menuView.getChildAt(i);\r\n                iconView.setRotation(-90f);\r\n            }\r\n        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){\r\n            recreate();\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void onSaveInstanceState(Bundle outState) {\r\n        super.onSaveInstanceState(outState);\r\n        outState.putInt(\"CurrentTab\", index);\r\n    }\r\n    @Override\r\n    protected void onStart() {\r\n        super.onStart();\r\n        auth.addAuthStateListener(authListener);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/calvindo/aldi/sutanto/tubes/MainActivity.java	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/java/com/calvindo/aldi/sutanto/tubes/MainActivity.java	(date 1607264024981)
+@@ -2,23 +2,18 @@
+ 
+ import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
+-import androidx.core.app.NotificationCompat;
+ import androidx.fragment.app.Fragment;
+ 
+ import android.app.Activity;
+ import android.app.NotificationChannel;
+ import android.app.NotificationManager;
+-import android.app.PendingIntent;
+-import android.content.Context;
+ import android.content.Intent;
+ import android.content.SharedPreferences;
+ import android.content.res.Configuration;
+ import android.os.Build;
+ import android.os.Bundle;
+-import android.provider.MediaStore;
+ import android.view.MenuItem;
+ import android.view.View;
+-import android.widget.Button;
+ import android.widget.Toast;
+ 
+ import com.google.android.gms.tasks.OnCompleteListener;
+@@ -30,8 +25,6 @@
+ import com.google.firebase.auth.FirebaseUser;
+ import com.google.firebase.messaging.FirebaseMessaging;
+ 
+-import static android.os.Build.VERSION_CODES.O;
+-
+ public class MainActivity extends AppCompatActivity {
+ 
+     private SharedPreferences preferences;
+@@ -56,7 +49,7 @@
+                             break;
+                         //memilih favFragment
+                         case R.id.action_fav:
+-                            selected = new FavoriteFragment();
++                            selected = new TransactionsFragment();
+                             index = 1;
+                             break;
+                         //memilih profilFragment
+@@ -86,7 +79,7 @@
+                             break;
+                         //memilih favFragment
+                         case R.id.action_fav:
+-                            selected = new FavoriteFragment();
++                            selected = new TransactionsFragment();
+                             index = 1;
+                             break;
+                         //memilih profilFragment
+Index: app/src/main/res/layout/item_transaksi.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<com.google.android.material.card.MaterialCardView xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:layout_marginLeft=\"10dp\"\r\n    android:layout_marginTop=\"10dp\"\r\n    android:layout_marginRight=\"10dp\"\r\n    android:id=\"@+id/item_user\"\r\n    app:cardCornerRadius=\"5dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\">\r\n            <RelativeLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\">\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_alignParentLeft=\"true\"\r\n                    android:textSize=\"18dp\"\r\n                    android:textStyle=\"bold\"\r\n                    android:text=\"Nama User\"\r\n                    android:textColor=\"@android:color/black\"/>\r\n                <TextView\r\n                    android:id=\"@+id/twNamaUser\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_alignParentEnd=\"true\"\r\n                    android:layout_alignParentRight=\"true\"\r\n                    android:layout_marginEnd=\"5dp\"\r\n                    android:hint=\"Nama User\"\r\n                    android:textAlignment=\"textEnd\"\r\n                    android:textColor=\"@android:color/black\"\r\n                    android:textSize=\"18dp\"/>\r\n            </RelativeLayout>\r\n            <RelativeLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\">\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_alignParentLeft=\"true\"\r\n                    android:textSize=\"18dp\"\r\n                    android:textStyle=\"bold\"\r\n                    android:text=\"Nama Kost\"\r\n                    android:textColor=\"@android:color/black\"/>\r\n                <TextView\r\n                    android:id=\"@+id/twNamaKost\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_alignParentEnd=\"true\"\r\n                    android:layout_alignParentRight=\"true\"\r\n                    android:layout_marginEnd=\"5dp\"\r\n                    android:hint=\"Nama Kost\"\r\n                    android:textAlignment=\"textEnd\"\r\n                    android:textColor=\"@android:color/black\"\r\n                    android:textSize=\"18dp\"/>\r\n            </RelativeLayout>\r\n            <RelativeLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\">\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_alignParentLeft=\"true\"\r\n                    android:textSize=\"18dp\"\r\n                    android:textStyle=\"bold\"\r\n                    android:text=\"Durasi\"\r\n                    android:textColor=\"@android:color/black\"/>\r\n                <TextView\r\n                    android:id=\"@+id/twDurasi\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_alignParentEnd=\"true\"\r\n                    android:layout_alignParentRight=\"true\"\r\n                    android:layout_marginEnd=\"5dp\"\r\n                    android:hint=\"Durasi\"\r\n                    android:textAlignment=\"textEnd\"\r\n                    android:textColor=\"@android:color/black\"\r\n                    android:textSize=\"18dp\"/>\r\n            </RelativeLayout>\r\n            <RelativeLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\">\r\n                <TextView\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_alignParentLeft=\"true\"\r\n                    android:textSize=\"18dp\"\r\n                    android:textStyle=\"bold\"\r\n                    android:text=\"Total Bayar\"\r\n                    android:textColor=\"@android:color/black\"/>\r\n                <TextView\r\n                    android:id=\"@+id/twTotalBayar\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_alignParentEnd=\"true\"\r\n                    android:layout_alignParentRight=\"true\"\r\n                    android:layout_marginEnd=\"5dp\"\r\n                    android:hint=\"Total Bayar\"\r\n                    android:textAlignment=\"textEnd\"\r\n                    android:textColor=\"@android:color/black\"\r\n                    android:textSize=\"18dp\"/>\r\n            </RelativeLayout>\r\n        </LinearLayout>\r\n\r\n\r\n</com.google.android.material.card.MaterialCardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/item_transaksi.xml	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/res/layout/item_transaksi.xml	(date 1607265478316)
+@@ -13,6 +13,7 @@
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="vertical">
++
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content">
+@@ -22,30 +23,7 @@
+                     android:layout_alignParentLeft="true"
+                     android:textSize="18dp"
+                     android:textStyle="bold"
+-                    android:text="Nama User"
+-                    android:textColor="@android:color/black"/>
+-                <TextView
+-                    android:id="@+id/twNamaUser"
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:layout_alignParentEnd="true"
+-                    android:layout_alignParentRight="true"
+-                    android:layout_marginEnd="5dp"
+-                    android:hint="Nama User"
+-                    android:textAlignment="textEnd"
+-                    android:textColor="@android:color/black"
+-                    android:textSize="18dp"/>
+-            </RelativeLayout>
+-            <RelativeLayout
+-                android:layout_width="match_parent"
+-                android:layout_height="wrap_content">
+-                <TextView
+-                    android:layout_width="wrap_content"
+-                    android:layout_height="wrap_content"
+-                    android:layout_alignParentLeft="true"
+-                    android:textSize="18dp"
+-                    android:textStyle="bold"
+-                    android:text="Nama Kost"
++                    android:text="ID Kost"
+                     android:textColor="@android:color/black"/>
+                 <TextView
+                     android:id="@+id/twNamaKost"
+@@ -54,7 +32,7 @@
+                     android:layout_alignParentEnd="true"
+                     android:layout_alignParentRight="true"
+                     android:layout_marginEnd="5dp"
+-                    android:hint="Nama Kost"
++                    android:hint="ID Kost"
+                     android:textAlignment="textEnd"
+                     android:textColor="@android:color/black"
+                     android:textSize="18dp"/>
+@@ -105,7 +83,15 @@
+                     android:textColor="@android:color/black"
+                     android:textSize="18dp"/>
+             </RelativeLayout>
++            <com.google.android.material.button.MaterialButton
++                android:layout_margin="10dp"
++                android:id="@+id/btnEdit"
++                android:layout_gravity="center"
++                android:text="Ubah Durasi"
++                android:layout_width="200dp"
++                android:layout_height="wrap_content"/>
+         </LinearLayout>
+ 
+ 
++
+ </com.google.android.material.card.MaterialCardView>
+\ No newline at end of file
+Index: app/src/main/java/com/calvindo/aldi/sutanto/tubes/adapter/RecyclerViewAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.calvindo.aldi.sutanto.tubes.adapter;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.util.Log;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;\r\nimport com.calvindo.aldi.sutanto.tubes.KostOnMAP;\r\nimport com.calvindo.aldi.sutanto.tubes.databinding.CardviewBinding;\r\nimport com.calvindo.aldi.sutanto.tubes.models.Favorites;\r\nimport com.calvindo.aldi.sutanto.tubes.models.Kost;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\n\r\nimport java.util.List;\r\n\r\npublic class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {\r\n\r\n    private static final String TAG = \"RecyclerViewAdapter\";\r\n\r\n    List<Kost> mData;\r\n    private Context mContext;\r\n\r\n    private String uid;\r\n\r\n    //Firebase\r\n    private FirebaseAuth auth;\r\n    private FirebaseUser user;\r\n\r\n    public RecyclerViewAdapter(Context context, List<Kost> mData) {\r\n        this.mContext = context;\r\n        this.mData = mData;\r\n        notifyDataSetChanged();\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());\r\n        CardviewBinding cardviewBinding = CardviewBinding.inflate(layoutInflater, parent, false);\r\n\r\n//        SharedPreferences sharedPreferences = mContext.getSharedPreferences(\"pref\", Context.MODE_PRIVATE);\r\n\r\n        return new MyViewHolder(cardviewBinding);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {\r\n        final Kost kost = mData.get(position);\r\n        holder.cardviewBinding.setKost(kost);\r\n        holder.cardviewBinding.executePendingBindings();\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return mData.size();\r\n    }\r\n\r\n    class MyViewHolder extends RecyclerView.ViewHolder{\r\n        String nama,kota,alamat,latitude,longitude,hp,image;\r\n        int status, id;\r\n        double cost;\r\n        CardviewBinding cardviewBinding;\r\n\r\n        public MyViewHolder(@NonNull CardviewBinding cardviewBinding) {\r\n\r\n            super(cardviewBinding.getRoot());\r\n            this.cardviewBinding = cardviewBinding;\r\n            auth = FirebaseAuth.getInstance();\r\n            user = auth.getCurrentUser();\r\n\r\n            cardviewBinding.btnFav.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View view) {\r\n                    Log.d(TAG,\"onClick: \" + mData.get(getAdapterPosition()) );\r\n\r\n                    id = mData.get(getAdapterPosition()).getId();\r\n                    nama = mData.get(getAdapterPosition()).getName();\r\n                    alamat = mData.get(getAdapterPosition()).getAlamat();\r\n                    kota = mData.get(getAdapterPosition()).getKota();\r\n                    latitude = mData.get(getAdapterPosition()).getLatitude();\r\n                    longitude = mData.get(getAdapterPosition()).getLongitude();\r\n                    hp = mData.get(getAdapterPosition()).getHPOwner();\r\n                    cost = mData.get(getAdapterPosition()).getCost();\r\n                    image = mData.get(getAdapterPosition()).getImage();\r\n                    uid = user.getUid();\r\n\r\n                    if (mData.get(getAdapterPosition()).getStatus() == 0){\r\n                        mData.get(getAdapterPosition()).setStatus(1);\r\n                        status = mData.get(getAdapterPosition()).getStatus();\r\n                        update(id,1);\r\n                        insert();\r\n                        Toast toast = Toast.makeText(view.getContext(), \"Successfully added to favorite\", Toast.LENGTH_SHORT);\r\n                        toast.show();\r\n                    }else {\r\n                        mData.get(getAdapterPosition()).setStatus(0);\r\n                        status = mData.get(getAdapterPosition()).getStatus();\r\n                        update(id,0);\r\n                        delete(id, uid, status);\r\n                        Toast toast = Toast.makeText(view.getContext(), \"Successfully removed to favorite\", Toast.LENGTH_SHORT);\r\n                        toast.show();\r\n                    }\r\n                }\r\n            });\r\n\r\n            cardviewBinding.btnMap.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View view) {\r\n                    latitude = mData.get(getAdapterPosition()).getLatitude();\r\n                    longitude = mData.get(getAdapterPosition()).getLongitude();\r\n                    Intent intent = new Intent(view.getContext(), KostOnMAP.class);\r\n                    intent.putExtra(\"LONGITUDE\", longitude);\r\n                    intent.putExtra(\"LATITUDE\", latitude);\r\n                    view.getContext().startActivity(intent);\r\n                }\r\n            });\r\n        }\r\n\r\n        public void update(final int id, final int status){\r\n            new Thread(new Runnable() {\r\n                @Override\r\n                public void run() {\r\n                    Kost kost = DatabaseClient.getInstance(mContext)\r\n                            .getDatabase().kostDAO().findkostbyid(id);\r\n\r\n                    kost.setStatus(status);\r\n\r\n                    DatabaseClient.getInstance(mContext).getDatabase()\r\n                            .kostDAO().update(kost);\r\n                }\r\n            }).start();\r\n        }\r\n        public void insert(){\r\n            new Thread(new Runnable() {\r\n                @Override\r\n                public void run() {\r\n                    Favorites cekFav = DatabaseClient.getInstance(mContext)\r\n                            .getDatabase().favDAO().fav(id,uid);\r\n\r\n                    if (cekFav==null){\r\n                        Favorites favorites = new Favorites(id, uid, nama, kota, alamat, latitude,\r\n                                longitude, hp, cost, image, 1);\r\n                        DatabaseClient.getInstance(mContext).getDatabase()\r\n                                .favDAO().insert(favorites);\r\n                    }\r\n                }\r\n            }).start();\r\n        }\r\n\r\n        public void delete(final int id, String uid , final int status){\r\n            new Thread(new Runnable() {\r\n                @Override\r\n                public void run() {\r\n                    Favorites cekFav = DatabaseClient.getInstance(mContext)\r\n                            .getDatabase().favDAO().fav(id,uid);\r\n\r\n                    if (cekFav!=null){\r\n                        DatabaseClient.getInstance(mContext).getDatabase()\r\n                                .favDAO().delete(cekFav);\r\n                    }\r\n                }\r\n            }).start();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/calvindo/aldi/sutanto/tubes/adapter/RecyclerViewAdapter.java	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/java/com/calvindo/aldi/sutanto/tubes/adapter/RecyclerViewAdapter.java	(date 1607260647710)
+@@ -1,11 +1,16 @@
+ package com.calvindo.aldi.sutanto.tubes.adapter;
+ 
++import android.app.AlertDialog;
+ import android.content.Context;
+ import android.content.Intent;
+ import android.util.Log;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.widget.AdapterView;
++import android.widget.ArrayAdapter;
++import android.widget.AutoCompleteTextView;
++import android.widget.TextView;
+ import android.widget.Toast;
+ 
+ import androidx.annotation.NonNull;
+@@ -13,13 +18,18 @@
+ 
+ import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
+ import com.calvindo.aldi.sutanto.tubes.KostOnMAP;
++import com.calvindo.aldi.sutanto.tubes.R;
+ import com.calvindo.aldi.sutanto.tubes.databinding.CardviewBinding;
+ import com.calvindo.aldi.sutanto.tubes.models.Favorites;
+ import com.calvindo.aldi.sutanto.tubes.models.Kost;
++import com.calvindo.aldi.sutanto.tubes.models.Transactions;
++import com.google.android.material.button.MaterialButton;
+ import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.auth.FirebaseUser;
+ 
++import java.util.ArrayList;
+ import java.util.List;
++import java.util.Objects;
+ 
+ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+ 
+@@ -27,6 +37,9 @@
+ 
+     List<Kost> mData;
+     private Context mContext;
++    private final String[] saLamaSewa = new String[]{ "1", "2", "3", "4", "5"};
++    private AutoCompleteTextView edLamaSewa;
++    private int lamaSewa=1;
+ 
+     private String uid;
+ 
+@@ -45,6 +58,7 @@
+     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+         CardviewBinding cardviewBinding = CardviewBinding.inflate(layoutInflater, parent, false);
++        mContext = parent.getContext();
+ 
+ //        SharedPreferences sharedPreferences = mContext.getSharedPreferences("pref", Context.MODE_PRIVATE);
+ 
+@@ -66,7 +80,7 @@
+     class MyViewHolder extends RecyclerView.ViewHolder{
+         String nama,kota,alamat,latitude,longitude,hp,image;
+         int status, id;
+-        double cost;
++        double cost, totalBayar;
+         CardviewBinding cardviewBinding;
+ 
+         public MyViewHolder(@NonNull CardviewBinding cardviewBinding) {
+@@ -121,6 +135,58 @@
+                     view.getContext().startActivity(intent);
+                 }
+             });
++
++            cardviewBinding.btnBooking.setOnClickListener(new View.OnClickListener() {
++                @Override
++                public void onClick(View view) {
++                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getRootView().getContext());
++
++                    View dialogV = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_booking, null);
++
++                    TextView namaKost = dialogV.findViewById(R.id.twNamaKost);
++                    namaKost.setText(mData.get(getAdapterPosition()).getName());
++                    edLamaSewa = dialogV.findViewById(R.id.edLamaSewa);
++
++                    final ArrayAdapter<String> adapterSewa = new ArrayAdapter<>(mContext,
++                            R.layout.dd_list, R.id.dd_list, saLamaSewa);
++
++                    edLamaSewa.setAdapter(adapterSewa);
++                    edLamaSewa.setOnItemClickListener(new AdapterView.OnItemClickListener() {
++                        @Override
++                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
++                            lamaSewa = Integer.parseInt(saLamaSewa[i]);
++                            Log.i(TAG, "lama sewa : "+lamaSewa+"saLamaSewa :"+saLamaSewa[i]);
++                        }
++                    });
++
++                    builder.setView(dialogV);
++                    builder.setCancelable(true);
++                    builder.show();
++
++                    cost = mData.get(getAdapterPosition()).getCost();
++                    id = mData.get(getAdapterPosition()).getId();
++                    uid = user.getUid();
++//                    totalBayar = lamaSewa * cost;
++
++                    totalBayar = lamaSewa * cost;
++                    Log.i(TAG, "total bayar: "+totalBayar+"lama sewa: "+lamaSewa+"cost: "+cost);
++
++
++
++
++
++
++                    MaterialButton btnBooking = dialogV.findViewById(R.id.btnBooking);
++
++                    btnBooking.setOnClickListener(new View.OnClickListener() {
++                        @Override
++                        public void onClick(View view) {
++                            booking();
++                            Log.i(TAG, "kepencet dab");
++                        }
++                    });
++                }
++            });
+         }
+ 
+         public void update(final int id, final int status){
+@@ -153,6 +219,26 @@
+                 }
+             }).start();
+         }
++
++        public void booking(){
++            new Thread(new Runnable() {
++                @Override
++                public void run() {
++                    Transactions trans = DatabaseClient.getInstance(mContext)
++                            .getDatabase().transDAO().transactions(id, uid);
++
++                    //public Transactions(int id, int idkost, String uid, int lamaSewa, double totalBayar)
++                    Transactions transactions = new Transactions(id, uid, lamaSewa, totalBayar );
++                    DatabaseClient.getInstance(mContext).getDatabase()
++                            .transDAO().insert(transactions);
++
++
++
++//                    Toast.makeText(mContext, "id kost: "+id+"uid"+uid, Toast.LENGTH_SHORT).show();
++                }
++            }).start();
++            Toast.makeText(mContext, "id kost: "+id+"uid: "+uid+ "lama sewa: "+lamaSewa+"total: "+totalBayar+"cost: "+cost, Toast.LENGTH_LONG).show();
++        }
+ 
+         public void delete(final int id, String uid , final int status){
+             new Thread(new Runnable() {
+Index: app/src/main/res/layout/cardview.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<layout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\">\r\n    <data>\r\n        <variable\r\n            name=\"kost\"\r\n            type=\"com.calvindo.aldi.sutanto.tubes.models.Kost\" />\r\n    </data>\r\n    <com.google.android.material.card.MaterialCardView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginBottom=\"10dp\"\r\n        app:cardCornerRadius=\"4dp\"\r\n        tools:context=\".RecyclerViewAdapter\"\r\n        android:id=\"@+id/ParentAdapter\">\r\n        <LinearLayout\r\n            android:orientation=\"horizontal\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\">\r\n\r\n            <ImageView\r\n                android:id=\"@+id/kota_image\"\r\n                android:layout_width=\"100dp\"\r\n                android:layout_height=\"150dp\"\r\n                android:scaleType=\"centerCrop\"\r\n                android:background=\"#2d2d2d\"\r\n                android:loadImage=\"@{kost.image}\"/>\r\n\r\n            <LinearLayout\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"match_parent\"\r\n                android:orientation=\"vertical\">\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"wrap_content\">\r\n                    <TextView\r\n                        android:id=\"@+id/nama_kost\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:layout_margin=\"10dp\"\r\n                        android:textSize=\"16sp\"\r\n                        android:text=\"@{kost.name}\"\r\n                        android:textStyle=\"bold\"\r\n                        android:textColor=\"#000\"/>\r\n\r\n                    <ImageButton\r\n                        android:id=\"@+id/btn_fav\"\r\n                        android:layout_width=\"20dp\"\r\n                        android:layout_height=\"20dp\"\r\n                        android:layout_marginTop=\"10dp\"\r\n                        android:background=\"@drawable/toggle_selector\"\r\n                        android:textOff=\"\"\r\n                        android:textOn=\"\"\r\n                        android:textSize=\"5dp\" />\r\n                </LinearLayout>\r\n\r\n                <TextView\r\n                    android:id=\"@+id/namakota\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_marginLeft=\"10dp\"\r\n                    android:textSize=\"13sp\"\r\n                    android:text=\"@{kost.kota}\"\r\n                    android:textColor=\"#000\"/>\r\n\r\n                <TextView\r\n                    android:id=\"@+id/noHPOwner\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_marginLeft=\"10dp\"\r\n                    android:textSize=\"13sp\"\r\n                    android:text=\"@{kost.HPOwner}\"\r\n                    android:textColor=\"#000\"/>\r\n                <TextView\r\n                    android:id=\"@+id/cost\"\r\n                    android:layout_width=\"wrap_content\"\r\n                    android:layout_height=\"wrap_content\"\r\n                    android:layout_marginLeft=\"10dp\"\r\n                    android:textSize=\"13sp\"\r\n                    android:text=\"@{String.valueOf(kost.cost)}\"\r\n                    android:textColor=\"#000\"/>\r\n\r\n                <LinearLayout\r\n                    android:layout_width=\"match_parent\"\r\n                    android:layout_height=\"match_parent\">\r\n                    <Button\r\n                        android:id=\"@+id/btn_map\"\r\n                        android:layout_margin=\"10dp\"\r\n                        android:layout_width=\"wrap_content\"\r\n                        android:layout_height=\"wrap_content\"\r\n                        android:text=\"View map\"\r\n                        android:textSize=\"12sp\"/>\r\n\r\n                </LinearLayout>\r\n            </LinearLayout>\r\n        </LinearLayout>\r\n    </com.google.android.material.card.MaterialCardView>\r\n</layout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/cardview.xml	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/res/layout/cardview.xml	(date 1607242877863)
+@@ -91,6 +91,13 @@
+                         android:layout_height="wrap_content"
+                         android:text="View map"
+                         android:textSize="12sp"/>
++                    <Button
++                        android:id="@+id/btn_booking"
++                        android:layout_margin="10dp"
++                        android:layout_width="wrap_content"
++                        android:layout_height="wrap_content"
++                        android:text="Booking"
++                        android:textSize="12sp"/>
+ 
+                 </LinearLayout>
+             </LinearLayout>
+Index: app/src/main/java/com/calvindo/aldi/sutanto/tubes/Database/AppDatabase.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.calvindo.aldi.sutanto.tubes.Database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.calvindo.aldi.sutanto.tubes.models.Favorites;\r\nimport com.calvindo.aldi.sutanto.tubes.models.Kost;\r\n\r\n@Database(entities = {Favorites.class, Kost.class}, version = 1, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    public abstract FavDAO favDAO();\r\n    public abstract KostDAO kostDAO();\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/calvindo/aldi/sutanto/tubes/Database/AppDatabase.java	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/java/com/calvindo/aldi/sutanto/tubes/Database/AppDatabase.java	(date 1607249143824)
+@@ -8,9 +8,11 @@
+ 
+ import com.calvindo.aldi.sutanto.tubes.models.Favorites;
+ import com.calvindo.aldi.sutanto.tubes.models.Kost;
++import com.calvindo.aldi.sutanto.tubes.models.Transactions;
+ 
+-@Database(entities = {Favorites.class, Kost.class}, version = 1, exportSchema = false)
++@Database(entities = {Favorites.class, Kost.class, Transactions.class}, version = 1, exportSchema = false)
+ public abstract class AppDatabase extends RoomDatabase {
+     public abstract FavDAO favDAO();
+     public abstract KostDAO kostDAO();
++    public abstract TransactionsDAO transDAO();
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_favorite.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<RelativeLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".FavoriteFragment\">\r\n\r\n    <!-- TODO: Update blank fragment layout -->\r\n    <View\r\n        android:id=\"@+id/top_view\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"200dp\"\r\n        android:layout_weight=\"1\"\r\n        android:background=\"@color/colorPrimary\" />\r\n\r\n    <View\r\n        android:id=\"@+id/view2\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"100dp\"\r\n        android:layout_below=\"@+id/top_view\"\r\n        android:layout_weight=\"1\"\r\n        android:background=\"@drawable/ic_wave\" />\r\n    <LinearLayout\r\n        android:layout_marginTop=\"90dp\"\r\n        android:padding=\"30dp\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n        <androidx.recyclerview.widget.RecyclerView\r\n            android:id=\"@+id/recyclerview_fav\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:background=\"#fff\"\r\n            tools:listitem=\"@layout/fav_cardview\">\r\n\r\n        </androidx.recyclerview.widget.RecyclerView>\r\n    </LinearLayout>\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView\"\r\n        android:layout_width=\"244dp\"\r\n        android:layout_height=\"86dp\"\r\n        android:fontFamily=\"sans-serif-black\"\r\n        android:text=\"GMBKost\"\r\n        android:textColor=\"#fff\"\r\n        android:textSize=\"40dp\"\r\n        android:layout_marginTop=\"20dp\"\r\n        android:layout_marginLeft=\"30sp\"/>\r\n\r\n    <TextView\r\n        android:id=\"@+id/textView1\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_marginLeft=\"30sp\"\r\n        android:layout_marginTop=\"70dp\"\r\n        android:fontFamily=\"sans-serif-condensed\"\r\n        android:text=\"Gahar Mantap Bauwangi\"\r\n        android:textColor=\"#fff\"\r\n        android:textSize=\"20dp\" />\r\n\r\n</RelativeLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_favorite.xml	(revision 32a97222bd0830a84f046279ffb740452bdda4c5)
++++ app/src/main/res/layout/fragment_favorite.xml	(date 1607264025028)
+@@ -3,7 +3,7 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+-    tools:context=".FavoriteFragment">
++    tools:context=".TransactionsFragment">
+ 
+     <!-- TODO: Update blank fragment layout -->
+     <View
+@@ -31,7 +31,7 @@
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="#fff"
+-            tools:listitem="@layout/fav_cardview">
++            tools:listitem="@layout/item_transaksi">
+ 
+         </androidx.recyclerview.widget.RecyclerView>
+     </LinearLayout>

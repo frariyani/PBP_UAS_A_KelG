@@ -8,9 +8,11 @@ import androidx.room.RoomDatabase;
 
 import com.calvindo.aldi.sutanto.tubes.models.Favorites;
 import com.calvindo.aldi.sutanto.tubes.models.Kost;
+import com.calvindo.aldi.sutanto.tubes.models.Transactions;
 
-@Database(entities = {Favorites.class, Kost.class}, version = 1, exportSchema = false)
+@Database(entities = {Favorites.class, Kost.class, Transactions.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FavDAO favDAO();
     public abstract KostDAO kostDAO();
+    public abstract TransactionsDAO transDAO();
 }

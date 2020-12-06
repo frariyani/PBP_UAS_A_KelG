@@ -28,8 +28,6 @@ public class TambahKostActivity extends AppCompatActivity {
     private MaterialButton btnCreate;
     private TextInputEditText etNama,etHarga,etLongitude, etLatitude, etLokasi, etURLGambar;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +76,6 @@ public class TambahKostActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
-//                Intent i = new Intent(TambahKostActivity.this, DashboardActivity.class);
-//                startActivity(i);
             }
         });
     }

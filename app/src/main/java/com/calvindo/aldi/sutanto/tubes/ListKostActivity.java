@@ -57,13 +57,11 @@ public class ListKostActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<KostResponse> call, Response<KostResponse> response) {
                 generateDataList(response.body().getKost());
-                Log.i("Quda : ", "Masuk RESPONSE ," + response.code() );
             }
 
             @Override
             public void onFailure(Call<KostResponse> call, Throwable t) {
                 Toast.makeText(ListKostActivity.this,"Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
-                Log.i("Quda : ", "Masuk FAILURE ," + t.getMessage() );
             }
         });
     }

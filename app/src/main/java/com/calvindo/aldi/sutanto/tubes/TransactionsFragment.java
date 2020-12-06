@@ -130,18 +130,10 @@ public class TransactionsFragment extends Fragment {
 //        private List<TransaksiClientAccess> transactions = new ArrayList<>();
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_favorite, container, false);
-
         auth = FirebaseAuth.getInstance();
         uid = auth.getUid();
-
-
         getKost();
-
         rv = v.findViewById(R.id.recyclerview_fav);
-
-
         return v;
-
-
     }
 }

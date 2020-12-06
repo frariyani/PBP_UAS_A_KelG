@@ -84,7 +84,7 @@ public class KostRecyclerAdapter extends RecyclerView.Adapter<KostRecyclerAdapte
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nama_kost,alamat,cost;
         MaterialButton btnEdit, btnDelete;
-        String snama, salamat, sharga, slongitude, slatitude, sgambar;
+        String snama, salamat, sharga, slongitude, slatitude, sgambar, sid;
         LinearLayout mParent;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -97,6 +97,7 @@ public class KostRecyclerAdapter extends RecyclerView.Adapter<KostRecyclerAdapte
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    sid = mData.get(getAdapterPosition()).getId();
                     snama = mData.get(getAdapterPosition()).getNama_kost();
                     salamat = mData.get(getAdapterPosition()).getAlamat();
                     sharga = mData.get(getAdapterPosition()).getHarga_sewa();
@@ -104,7 +105,9 @@ public class KostRecyclerAdapter extends RecyclerView.Adapter<KostRecyclerAdapte
                     slatitude = mData.get(getAdapterPosition()).getLatitude();
                     sgambar = mData.get(getAdapterPosition()).getGambar();
 
+
                     Intent i = new Intent(itemView.getContext(), EditKostActivity.class);
+                    i.putExtra("sid", sid);
                     i.putExtra("snama", snama);
                     i.putExtra("salamat", salamat);
                     i.putExtra("sharga", sharga);
@@ -134,12 +137,12 @@ public class KostRecyclerAdapter extends RecyclerView.Adapter<KostRecyclerAdapte
             call.enqueue(new Callback<KostResponse>() {
                 @Override
                 public void onResponse(Call<KostResponse> call, Response<KostResponse> response) {
-                    Log.i("Quda : ", "Masuk RESPONSE ," + response.code() );
+                    Toast.makeText(itemView.getContext(),"Data Berhasil di Hapus", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void onFailure(Call<KostResponse> call, Throwable t) {
-                    Log.i("Quda : ", "Masuk FAILURE ," + t.getMessage() );
+                    Toast.makeText(itemView.getContext(),"Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
                 }
             });
         }

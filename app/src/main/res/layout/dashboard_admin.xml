@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".DashboardActivity">
 
     <View
         android:id="@+id/top_view"
@@ -24,10 +26,12 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/textView1">
         <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
             <GridLayout
+                android:id="@+id/grid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnCount="2"
@@ -164,12 +168,24 @@
                             android:textStyle="bold"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
-
             </GridLayout>
+
+            <TextView
+                android:id="@+id/tvLogout"
+                android:clickable="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Logout"
+                android:layout_marginLeft="34dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22dp"
+                android:textStyle="italic|bold"/>
+
         </LinearLayout>
 
     </ScrollView>
+
 
     <TextView
         android:id="@+id/textView"

@@ -116,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
                 if(user == null){
                     startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                     finish();
+                }else if(auth.getCurrentUser().getEmail().equalsIgnoreCase("admin@admin.com")){
+                    startActivity(new Intent(MainActivity.this, DashboardActivity.class));
+                    finish();
                 }
             }
         };

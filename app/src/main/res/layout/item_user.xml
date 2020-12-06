@@ -11,16 +11,9 @@
 
     <LinearLayout
         android:orientation="horizontal"
+        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/avatar"
-            android:layout_width="120dp"
-            android:layout_height="130dp"
-            android:layout_marginRight="8dp"
-            android:scaleType="centerCrop"
-            android:background="#2d2d2d" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,7 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:textSize="18dp"
+                    android:textSize="14dp"
                     android:textStyle="bold"
                     android:text="Email"
                     android:textColor="@android:color/black"/>
@@ -47,7 +40,7 @@
                     android:hint="Email"
                     android:textAlignment="textEnd"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"/>
+                    android:textSize="14dp"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -56,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:textSize="18dp"
+                    android:textSize="14dp"
                     android:textStyle="bold"
                     android:text="Username"
                     android:textColor="@android:color/black"/>
@@ -70,7 +63,7 @@
                     android:hint="Username"
                     android:textAlignment="textEnd"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"/>
+                    android:textSize="14dp"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -79,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:textSize="18dp"
+                    android:textSize="14dp"
                     android:textStyle="bold"
                     android:text="Nama"
                     android:textColor="@android:color/black"/>
@@ -93,7 +86,7 @@
                     android:hint="Nama"
                     android:textAlignment="textEnd"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"/>
+                    android:textSize="14dp"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -102,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:textSize="18dp"
+                    android:textSize="14dp"
                     android:textStyle="bold"
                     android:text="Alamat"
                     android:textColor="@android:color/black"/>
@@ -116,7 +109,7 @@
                     android:hint="Alamat"
                     android:textAlignment="textEnd"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"/>
+                    android:textSize="14dp"/>
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -125,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:textSize="18dp"
+                    android:textSize="14dp"
                     android:textStyle="bold"
                     android:text="No. Telpon"
                     android:textColor="@android:color/black"/>
@@ -139,7 +132,7 @@
                     android:hint="No. Telpon"
                     android:textAlignment="textEnd"
                     android:textColor="@android:color/black"
-                    android:textSize="18dp"/>
+                    android:textSize="14dp"/>
             </RelativeLayout>
 
 

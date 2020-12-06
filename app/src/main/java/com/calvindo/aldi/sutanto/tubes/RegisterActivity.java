@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseDatabase rootNode;
     private DatabaseReference reference;
-    private String getEmail, getPassword;
+    private String getEmail, getPassword, getUsername, getNama, getNoTelp, getAlamat;
     private TextView loginLink;
     private String CHANNEL_ID = "Channe 1";
 

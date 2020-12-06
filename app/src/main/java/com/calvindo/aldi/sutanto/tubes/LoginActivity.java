@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -112,7 +113,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             //Check if email verified
-                            if (auth.getCurrentUser().isEmailVerified()){
+                            if(auth.getCurrentUser().getEmail().equalsIgnoreCase("admin@admin.com")){
+                                Intent i = new Intent(LoginActivity.this, DashboardActivity.class);
+                                finish();
+                                startActivity(i);
+                            }
+                            else if (auth.getCurrentUser().isEmailVerified()){
                                 createNotification();
                                 Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));

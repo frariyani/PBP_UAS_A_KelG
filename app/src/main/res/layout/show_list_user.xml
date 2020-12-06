@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/show_list_user"
+    tools:context=".ListUserActivity">
 
     <LinearLayout
         android:id="@+id/navbar"
@@ -16,7 +18,7 @@
             android:id="@+id/back"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
-            android:background="@drawable/backicon"
+            android:background="@drawable/ic_baseline_arrow_back_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView

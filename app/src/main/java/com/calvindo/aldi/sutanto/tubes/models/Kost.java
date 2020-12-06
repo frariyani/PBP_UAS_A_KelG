@@ -134,6 +134,7 @@ public class Kost {
     public void setImage(String image) {
         this.image = image;
     }
+
     @BindingAdapter("android:loadImage")
     public static void loadImage(ImageView imageView, String imgURL){
         Glide.with(imageView)

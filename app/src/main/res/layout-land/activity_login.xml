@@ -112,15 +112,15 @@
                     android:text="Login"
                     android:textColor="@android:color/white" />
 
-                <TextView
-                    android:id="@+id/register_link"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center"
-                    android:text="Register"
-                    android:textSize="16dp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/register_link"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:clickable="true"-->
+<!--                    android:focusable="true"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="Register"-->
+<!--                    android:textSize="16dp" />-->
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

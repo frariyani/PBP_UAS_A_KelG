@@ -35,20 +35,13 @@
                 android:textColor="#000"/>
 
             <TextView
-                android:id="@+id/namakota"
+                android:id="@+id/alamat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:textSize="13sp"
                 android:textColor="#000"/>
 
-            <TextView
-                android:id="@+id/noHPOwner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:textSize="13sp"
-                android:textColor="#000"/>
             <TextView
                 android:id="@+id/cost"
                 android:layout_width="wrap_content"

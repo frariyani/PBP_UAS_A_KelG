@@ -58,23 +58,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:padding="4dp"
             android:layout_marginStart="50px"
             android:layout_marginEnd="50px"
             android:orientation="vertical">
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_gambar"
-                android:layout_marginVertical="8dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etURLGambar"
-                    android:inputType="text"
-                    android:hint="URL Gambar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_nama"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -101,6 +89,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_longitude"
+                android:layout_marginVertical="8dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLongitude"
+                    android:inputType="text"
+                    android:hint="Longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_latitude"
+                android:layout_marginVertical="8dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etLatitude"
+                    android:inputType="text"
+                    android:hint="Latitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layout_lokasi"
                 android:layout_marginVertical="8dp"
@@ -108,9 +124,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etLokasiKost"
+                    android:id="@+id/etLokasi"
                     android:inputType="text"
                     android:hint="Lokasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_gambar"
+                android:layout_marginVertical="8dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etURLGambar"
+                    android:inputType="text"
+                    android:hint="URL Gambar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
             </com.google.android.material.textfield.TextInputLayout>
@@ -124,7 +153,7 @@
         android:layout_marginHorizontal="30dp"
         android:layout_height="wrap_content">
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBatal"
+            android:id="@+id/btnCancel"
             android:text="Cancel"
             android:textColor="@android:color/white"
             android:layout_weight="0.8"
@@ -133,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnTambah"
+            android:id="@+id/btnSave"
             android:text="Save"
             android:textColor="@android:color/white"
             android:layout_weight="0.8"

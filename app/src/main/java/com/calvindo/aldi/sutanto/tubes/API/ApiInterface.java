@@ -86,6 +86,6 @@ public interface ApiInterface {
                                             @Field("total_pembayaran") double total_pembayaran);
 
     @DELETE("transaksi/{id}")
-    Call<TransaksiResponse> deleteKost(@Path("id")int id);
+    Call<TransaksiResponse> deleteTransaksi(@Path("id")String id);
 
 }

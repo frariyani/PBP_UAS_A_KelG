@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +56,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //    private KostClientAccess kost;
 
     private String uid, id_transaksi;
+    private String id;
+    private Double cost, totalBayar;
 
     //Firebase
     private FirebaseAuth auth;
@@ -90,6 +93,78 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .apply(new RequestOptions().override(100, 150))
                 .into(holder.image);
 
+        holder.btnBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getRootView().getContext());
+
+                View dialogV = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_booking, null);
+
+                TextView namaKost = dialogV.findViewById(R.id.twNamaKost);
+                namaKost.setText(kost.getNama_kost());
+                edLamaSewa = dialogV.findViewById(R.id.edLamaSewa);
+
+                builder.setView(dialogV);
+                builder.setCancelable(true);
+                builder.show();
+
+                final ArrayAdapter<String> adapterSewa = new ArrayAdapter<>(mContext,
+                        R.layout.dd_list, R.id.dd_list, saLamaSewa);
+
+                edLamaSewa.setAdapter(adapterSewa);
+                edLamaSewa.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        lamaSewa = Integer.parseInt(saLamaSewa[i]);
+                        Log.i(TAG, "lama sewa : " + lamaSewa + "saLamaSewa :" + saLamaSewa[i]);
+                    }
+                });
+
+//                    int kost_id = mData.get(getAdapterPosition()).getId();
+                id = kost.getId();
+
+                cost = Double.parseDouble(kost.getHarga_sewa());
+                uid = user.getUid();
+
+                totalBayar = lamaSewa * cost;
+                Log.i(TAG, "total bayar: " + totalBayar + "lama sewa: " + lamaSewa + "cost: " + cost);
+
+
+                MaterialButton btnBooking = dialogV.findViewById(R.id.btnBooking);
+
+                btnBooking.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+//TransaksiClientAccess(String id, String id_user, String id_kost, int lama_sewa, double total_pembayaran)
+                        retrofit2.Call<TransaksiResponse> add = apiService.createTransaksi(
+                                uid,
+                                id,
+                                lamaSewa,
+                                totalBayar
+                        );
+
+                        add.enqueue(new Callback<TransaksiResponse>() {
+                            @Override
+                            public void onResponse(Call<TransaksiResponse> call, Response<TransaksiResponse> response) {
+//                    Toast.makeText(mContext, "uid: "+uid+
+//                                                  "id_kost: "+id+
+//                                                  "lama sewa: "+lamaSewa+
+//                                                  "total bayar: "+totalBayar, Toast.LENGTH_LONG).show();
+                                Log.i("Quda : ", "Masuk RESPONSE ," + response.body());
+                            }
+
+                            @Override
+                            public void onFailure(Call<TransaksiResponse> call, Throwable t) {
+                                Log.i("Gagal: ", t.getMessage());
+                            }
+                        });
+                        Log.i("Gagal Dab: ", "kepencet dab");
+                    }
+                });
+            }
+        });
+
     }
 
     @Override
@@ -103,6 +178,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         int status;
         String id;
         double totalBayar;
+        Button btnBook;
 
         public MyViewHolder(@NonNull View itemView) {
 
@@ -115,6 +191,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             hp = itemView.findViewById(R.id.noHPOwner);
             cost = itemView.findViewById(R.id.cost);
             image = itemView.findViewById(R.id.kota_image);
+            btnBook = itemView.findViewById(R.id.btn_booking);
 //            Glide.with(getActivity())
 //                    .load(avatar)
 //                    .apply(RequestOptions.circleCropTransform())

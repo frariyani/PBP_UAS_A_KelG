@@ -1,7 +1,9 @@
 package com.calvindo.aldi.sutanto.tubes.adapter;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +17,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.calvindo.aldi.sutanto.tubes.API.ApiClient;
+import com.calvindo.aldi.sutanto.tubes.API.ApiInterface;
+import com.calvindo.aldi.sutanto.tubes.API.TransaksiResponse;
 import com.calvindo.aldi.sutanto.tubes.Database.DatabaseClient;
 import com.calvindo.aldi.sutanto.tubes.Database.TransaksiClientAccess;
 import com.calvindo.aldi.sutanto.tubes.R;
 import com.calvindo.aldi.sutanto.tubes.models.Transactions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.http.Field;
+import retrofit2.http.Path;
 
 public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.TransaksiViewHolder> {
     private static final String TAG = "RecyclerViewAdapter";
@@ -31,7 +44,12 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.Tran
     AutoCompleteTextView edLamaSewa;
     private final String[] saLamaSewa = new String[]{ "1", "2", "3", "4", "5"};
     private int lamaSewa=1;
-    int id;
+    String uid;
+    private String idTrans;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private Double totalbayar;
+    private ProgressDialog pd;
 
     public TransaksiAdapter(Context context, List<TransaksiClientAccess> transactionsList) {
         this.context = context;
@@ -49,7 +67,7 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.Tran
 
     public class TransaksiViewHolder extends RecyclerView.ViewHolder{
         private TextView twNamaUser, twNamaKost, twDurasi, twTotal;
-        private MaterialButton mbEdit;
+        private MaterialButton mbEdit, mbDelete;
 
         public TransaksiViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,6 +76,7 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.Tran
             twNamaKost = itemView.findViewById(R.id.twNamaKost);
             twDurasi = itemView.findViewById(R.id.twDurasi);
             twTotal = itemView.findViewById(R.id.twTotalBayar);
+            mbDelete = itemView.findViewById(R.id.btnDelete);
 
 
 
@@ -72,42 +91,18 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.Tran
         holder.twTotal.setText(String.valueOf(transactions.getTotal_pembayaran()));
         holder.twDurasi.setText(String.valueOf(transactions.getLama_sewa()));
 
-        holder.mbEdit.setOnClickListener(new View.OnClickListener() {
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        uid = user.getUid();
+
+        idTrans = transactions.getId();
+
+
+        holder.mbDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getRootView().getContext());
-
-                View dialogV = LayoutInflater.from(view.getRootView().getContext()).inflate(R.layout.dialog_booking, null);
-
-                edLamaSewa = dialogV.findViewById(R.id.edLamaSewa);
-
-                final ArrayAdapter<String> adapterSewa = new ArrayAdapter<>(context,
-                        R.layout.dd_list, R.id.dd_list, saLamaSewa);
-
-                edLamaSewa.setAdapter(adapterSewa);
-                edLamaSewa.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        lamaSewa = Integer.parseInt(saLamaSewa[i]);
-                    }
-                });
-
-                builder.setView(dialogV);
-                builder.setCancelable(true);
-                builder.show();
-
-//                id = transactionsList.get()
-
-                MaterialButton button = dialogV.findViewById(R.id.btnBooking);
-
-//                button.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-////                    public void onClick(View view) {
-////                        update(transactions.getId_kost());
-////                    }
-//                });
-
-
+                delete(idTrans);
+                Toast.makeText(context, "ID trans: "+idTrans, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -117,17 +112,60 @@ public class TransaksiAdapter extends RecyclerView.Adapter<TransaksiAdapter.Tran
         return transactionsList.size();
     }
 
-    public void update(final int id){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Transactions transactions = DatabaseClient.getInstance(context)
-                                    .getDatabase().transDAO().findtransbyid(id);
-
-                DatabaseClient.getInstance(context).getDatabase()
-                        .transDAO().update(transactions);
-            }
-        }).start();
-        Toast.makeText(context, "id kost: "+id+"lama sewa: "+lamaSewa+"total: ", Toast.LENGTH_LONG).show();
+    public void update(final String id){
+//        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+////        Call<TransaksiResponse> updateTransaksi(@Path("id")int id,
+////        @Field("id_user")String id_user,
+////        @Field("id_kost")String id_kost,
+////        @Field("lama_sewa") int lama_sewa,
+////        @Field("total_pembayaran") double total_pembayaran);
+//        Call<TransaksiResponse> request = apiService.updateTransaksi(idTrans, uid, id, lamaSewa, )
+//
+//        request.enqueue(new Callback<TransaksiResponse>() {
+//            @Override
+//            public void onResponse(Call<TransaksiResponse> call, Response<TransaksiResponse> response) {
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<TransaksiResponse> call, Throwable t) {
+//
+//            }
+//        });
     }
+
+    public void delete(final String id_trans){
+        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
+        Call<TransaksiResponse> req = apiService.deleteTransaksi(id_trans);
+
+        req.enqueue(new Callback<TransaksiResponse>() {
+            @Override
+            public void onResponse(Call<TransaksiResponse> call, Response<TransaksiResponse> response) {
+                Toast.makeText(context, "Berhasil dihapus", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<TransaksiResponse> call, Throwable t) {
+                Toast.makeText(context, "Kesalahan jaringan", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+//    public void deleteData(String id){
+//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+//        Call<KostResponse> call = apiInterface.deleteKost(id);
+//
+//        call.enqueue(new Callback<KostResponse>() {
+//            @Override
+//            public void onResponse(Call<KostResponse> call, Response<KostResponse> response) {
+//                Toast.makeText(itemView.getContext(),"Data Berhasil di Hapus", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<KostResponse> call, Throwable t) {
+//                Toast.makeText(itemView.getContext(),"Kesalahan Jaringan", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }

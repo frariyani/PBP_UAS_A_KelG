@@ -19,7 +19,7 @@ public interface TransactionsDAO {
     Transactions transactions(int id, String uid);
 
     @Query("SELECT * FROM transactions WHERE id LIKE :id")
-    Transactions findtransbyid(int id);
+    Transactions findtransbyid(String id);
 
     @Insert
     void insert(Transactions transactions);

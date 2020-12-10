@@ -12,6 +12,18 @@ public class KostResponse {
     @Expose
     private List<KostClientAccess> kost;
 
+    public KostClientAccess getSingleKost() {
+        return SingleKost;
+    }
+
+    public void setSingleKost(KostClientAccess singleKost) {
+        SingleKost = singleKost;
+    }
+
+    @SerializedName("kost")
+    @Expose
+    private KostClientAccess SingleKost;
+
     @SerializedName("message")
     @Expose
     private String message;
@@ -19,6 +31,8 @@ public class KostResponse {
     public List<KostClientAccess> getKost() {
         return kost;
     }
+
+//    private KostClientAccess SingleKost() { }
 
     public void setKost(List<KostClientAccess> users) {
         this.kost = users;

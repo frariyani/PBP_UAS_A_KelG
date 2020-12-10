@@ -5,9 +5,9 @@
         android:id="@+id/action_home"
         android:icon="@drawable/ic_baseline_home_24"/>
     <item
-        android:title="Favorite"
+        android:title="Booked"
         android:id="@+id/action_fav"
-        android:icon="@drawable/ic_baseline_favorite_24"/>
+        android:icon="@drawable/ic_baseline_shopping_cart_24"/>
     <item
         android:title="Profile"
         android:id="@+id/action_profile"

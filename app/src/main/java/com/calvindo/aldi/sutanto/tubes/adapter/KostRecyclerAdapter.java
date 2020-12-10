@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.calvindo.aldi.sutanto.tubes.API.ApiClient;
 import com.calvindo.aldi.sutanto.tubes.API.ApiInterface;
 import com.calvindo.aldi.sutanto.tubes.API.KostResponse;
@@ -32,6 +34,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 
 import retrofit2.Call;
@@ -69,11 +73,26 @@ public class KostRecyclerAdapter extends RecyclerView.Adapter<KostRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull KostRecyclerAdapter.MyViewHolder holder, int position) {
         final KostClientAccess kost = mData.get(position);
+
+        DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+        DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
+
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
+        double harga_sewa = Double.parseDouble(kost.getHarga_sewa());
+        String harga = kursIndonesia.format(harga_sewa) + "/ bulan";
+
         Log.i("DAPET NAMA KOST : ", "" + kost.getNama_kost());
         holder.nama_kost.setText(kost.getNama_kost());
         holder.alamat.setText(kost.getAlamat());
-        holder.cost.setText(kost.getHarga_sewa());
-
+        holder.cost.setText(harga);
+        Glide.with(mContext)
+                .load(kost.getGambar())
+                .apply(new RequestOptions().override(100, 150))
+                .into(holder.gambar);
     }
 
     @Override
@@ -84,6 +103,7 @@ public class KostRecyclerAdapter extends RecyclerView.Adapter<KostRecyclerAdapte
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nama_kost,alamat,cost;
         MaterialButton btnEdit, btnDelete;
+        ImageView gambar;
         String snama, salamat, sharga, slongitude, slatitude, sgambar, sid;
         LinearLayout mParent;
 
@@ -93,6 +113,7 @@ public class KostRecyclerAdapter extends RecyclerView.Adapter<KostRecyclerAdapte
             alamat = itemView.findViewById(R.id.alamat);
             cost = itemView.findViewById(R.id.cost);
             btnEdit = itemView.findViewById(R.id.btn_edit);
+            gambar = itemView.findViewById(R.id.imgkost);
 
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,7 +125,6 @@ public class KostRecyclerAdapter extends RecyclerView.Adapter<KostRecyclerAdapte
                     slongitude = mData.get(getAdapterPosition()).getLongitude();
                     slatitude = mData.get(getAdapterPosition()).getLatitude();
                     sgambar = mData.get(getAdapterPosition()).getGambar();
-
 
                     Intent i = new Intent(itemView.getContext(), EditKostActivity.class);
                     i.putExtra("sid", sid);

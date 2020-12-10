@@ -1,13 +1,6 @@
 package com.calvindo.aldi.sutanto.tubes.Database;
 
-import android.widget.ImageView;
-
-import androidx.databinding.BindingAdapter;
-
-import com.bumptech.glide.Glide;
 import com.google.gson.annotations.SerializedName;
-
-import java.lang.annotation.Annotation;
 
 public class KostClientAccess {
     @SerializedName("id")

@@ -19,6 +19,9 @@ public interface ApiInterface {
     @GET("kost")
     Call<KostResponse> getAllKost();
 
+    @GET("kost/{id}")
+    Call<KostResponse> getKostbyID(@Path("id") String id);
+
     @POST("kost")
     @FormUrlEncoded
     Call<KostResponse> createKost(@Field("nama_kost") String nama,
@@ -44,6 +47,9 @@ public interface ApiInterface {
     @GET("transaksi/{id}")
     Call<TransaksiResponse> getAllTransaksi(@Path("id")String uid);
 
+    @GET("transaksi/kost/{id}")
+    Call<TransaksiResponse> getTransaksibyID(@Path("id")String uid);
+
     @POST("transaksi")
     @FormUrlEncoded
     Call<TransaksiResponse> createTransaksi(@Field("id_user")String id_user,
@@ -51,9 +57,9 @@ public interface ApiInterface {
                                             @Field("lama_sewa") int lama_sewa,
                                             @Field("total_pembayaran") double total_pembayaran);
 
-    @PUT("transaksi/{id}")
+    @POST("transaksi/{id}")
     @FormUrlEncoded
-    Call<TransaksiResponse> updateTransaksi(@Path("id")int id,
+    Call<TransaksiResponse> updateTransaksi(@Path("id")String id,
                                             @Field("id_user")String id_user,
                                             @Field("id_kost")String id_kost,
                                             @Field("lama_sewa") int lama_sewa,

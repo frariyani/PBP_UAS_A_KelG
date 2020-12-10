@@ -44,7 +44,7 @@ public class KostAdminAdapter extends RecyclerView.Adapter<KostAdminAdapter.Kost
 
         holder.tvNama.setText(kost.getNama_kost());
         holder.tvAlamat.setText(kost.getAlamat());
-        holder.tvCost.setText(kost.getHarga_sewa());
+        holder.tvCost.setText(String.valueOf(kost.getHarga_sewa()));
         Glide.with(context)
                 .load(kost.getGambar())
                 .apply(new RequestOptions().override(100, 150))

@@ -59,8 +59,6 @@ public class TransactionsFragment extends Fragment {
     private FirebaseUser user;
 
 
-
-
     public TransactionsFragment() {
         // Required empty public constructor
     }

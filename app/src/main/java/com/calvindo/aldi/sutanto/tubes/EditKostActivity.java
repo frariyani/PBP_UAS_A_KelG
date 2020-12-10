@@ -91,11 +91,11 @@ public class EditKostActivity extends AppCompatActivity {
                 cost.getText().toString(),
                 gambar.getText().toString());
 
-//        Toast.makeText(EditKostActivity.this,"" + sid + nama_kost.getText().toString() + salamat, Toast.LENGTH_SHORT).show();
+//
         call.enqueue(new Callback<KostResponse>() {
             @Override
             public void onResponse(Call<KostResponse> call, Response<KostResponse> response) {
-
+                Toast.makeText(EditKostActivity.this,"" + response.code(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

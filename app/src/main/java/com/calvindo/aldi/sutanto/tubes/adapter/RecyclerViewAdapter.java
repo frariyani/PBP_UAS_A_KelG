@@ -36,6 +36,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -46,7 +48,7 @@ import retrofit2.Response;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
-    private static final String TAG = "RecyclerViewAdapter";
+    private static final String TAG = "QUDA";
 
     List<KostClientAccess> mData;
     private Context mContext;
@@ -85,13 +87,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final KostClientAccess kost = mData.get(position);
 
+        DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+        DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
+
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
+        double harga_sewa = Double.parseDouble(kost.getHarga_sewa());
+        String harga = kursIndonesia.format(harga_sewa) + "/ bulan";
+
         holder.nama.setText(kost.getNama_kost());
         holder.alamat.setText(kost.getAlamat());
-        holder.cost.setText(kost.getHarga_sewa());
+        holder.cost.setText(harga);
         Glide.with(mContext)
-                .load("https://cdn.discordapp.com/attachments/548704072073609226/785217785735151646/qINR2TfT_400x400.jpg")
+                .load(kost.getGambar())
                 .apply(new RequestOptions().override(100, 150))
                 .into(holder.image);
+
+        holder.btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String latitude = kost.getLatitude();
+                String longitude = kost.getLongitude();
+                Intent intent = new Intent(view.getContext(), KostOnMAP.class);
+                intent.putExtra("LONGITUDE", longitude);
+                intent.putExtra("LATITUDE", latitude);
+                view.getContext().startActivity(intent);
+            }
+        });
 
         holder.btnBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,11 +148,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //                    int kost_id = mData.get(getAdapterPosition()).getId();
                 id = kost.getId();
 
-                cost = Double.parseDouble(kost.getHarga_sewa());
-                uid = user.getUid();
-
-                totalBayar = lamaSewa * cost;
-                Log.i(TAG, "total bayar: " + totalBayar + "lama sewa: " + lamaSewa + "cost: " + cost);
 
 
                 MaterialButton btnBooking = dialogV.findViewById(R.id.btnBooking);
@@ -135,6 +155,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 btnBooking.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        cost = Double.parseDouble(kost.getHarga_sewa());
+                        uid = user.getUid();
+
+                        totalBayar = lamaSewa * cost;
+                        Log.i(TAG, "total bayar: " + totalBayar + "lama sewa: " + lamaSewa + "cost: " + cost);
+
+
                         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
 //TransaksiClientAccess(String id, String id_user, String id_kost, int lama_sewa, double total_pembayaran)
                         retrofit2.Call<TransaksiResponse> add = apiService.createTransaksi(
@@ -178,7 +205,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         int status;
         String id;
         double totalBayar;
-        Button btnBook;
+        Button btnBook, btnMap;
 
         public MyViewHolder(@NonNull View itemView) {
 
@@ -192,6 +219,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             cost = itemView.findViewById(R.id.cost);
             image = itemView.findViewById(R.id.kota_image);
             btnBook = itemView.findViewById(R.id.btn_booking);
+            btnMap = itemView.findViewById(R.id.btn_map);
 //            Glide.with(getActivity())
 //                    .load(avatar)
 //                    .apply(RequestOptions.circleCropTransform())
@@ -302,7 +330,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             });
         }
-
-
     }
 }

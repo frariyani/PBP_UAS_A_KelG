@@ -7,11 +7,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.calvindo.aldi.sutanto.tubes.API.ApiClient;
@@ -53,6 +55,8 @@ public class TransactionsFragment extends Fragment {
     private TransaksiAdapter transaksiAdapter;
     private String uid;
     private List<TransaksiClientAccess> transactions = new ArrayList<>();
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar progressBar;
 
     //Firebase
     private FirebaseAuth auth;
@@ -90,8 +94,35 @@ public class TransactionsFragment extends Fragment {
         }
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+//        private RecyclerView rv;
+//        private TransaksiAdapter transaksiAdapter;
+//        private List<TransaksiClientAccess> transactions = new ArrayList<>();
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_favorite, container, false);
+        auth = FirebaseAuth.getInstance();
+        uid = auth.getUid();
+        swipeRefreshLayout = v.findViewById(R.id.refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getKost();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+        rv = v.findViewById(R.id.recyclerview_fav);
+        progressBar = v.findViewById(R.id.progressBar);
+
+        getKost();
+        return v;
+    }
+
 
     public void getKost(){
+        progressBar.setVisibility(View.VISIBLE);
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<TransaksiResponse> call = apiService.getAllTransaksi(uid);
 
@@ -100,6 +131,7 @@ public class TransactionsFragment extends Fragment {
             public void onResponse(Call<TransaksiResponse> call, Response<TransaksiResponse> response) {
                 Toast.makeText(getContext(), "Berhasil tampil data", Toast.LENGTH_SHORT).show();
                 generateList(response.body().getTransaksi());
+                progressBar.setVisibility(View.INVISIBLE);
                 Log.i("Quda : ", "Masuk RESPONSE ," + response.body().getMessage());
             }
 
@@ -120,18 +152,5 @@ public class TransactionsFragment extends Fragment {
         rv.setAdapter(transaksiAdapter);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-//        private RecyclerView rv;
-//        private TransaksiAdapter transaksiAdapter;
-//        private List<TransaksiClientAccess> transactions = new ArrayList<>();
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_favorite, container, false);
-        auth = FirebaseAuth.getInstance();
-        uid = auth.getUid();
-        getKost();
-        rv = v.findViewById(R.id.recyclerview_fav);
-        return v;
-    }
+
 }

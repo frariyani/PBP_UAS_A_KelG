@@ -9,9 +9,10 @@
     <View
         android:id="@+id/top_view"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_weight="1"
         android:background="@color/colorPrimary" />
+
     <View
         android:id="@+id/view2"
         android:layout_width="wrap_content"
@@ -19,11 +20,17 @@
         android:layout_below="@+id/top_view"
         android:layout_weight="1"
         android:background="@drawable/ic_wave" />
-    <LinearLayout
-        android:layout_marginTop="90dp"
-        android:padding="30dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/textView1"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/textView1"
+        app:layout_constraintStart_toStartOf="@id/textView1"
+        app:layout_constraintTop_toBottomOf="@id/textView1">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_kost"
@@ -33,18 +40,26 @@
             tools:listitem="@layout/cardview">
 
         </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="244dp"
-        android:layout_height="86dp"
+        android:layout_height="50dp"
         android:fontFamily="sans-serif-black"
         android:text="GMBKost"
         android:textColor="#fff"
-        android:textSize="40dp"
-        android:layout_marginTop="20dp"
+        android:textSize="20dp"
+        android:layout_marginTop="30sp"
         android:layout_marginLeft="30sp"/>
 
     <TextView
@@ -52,10 +67,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30sp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="55dp"
         android:fontFamily="sans-serif-condensed"
         android:text="Gahar Mantap Bauwangi"
         android:textColor="#fff"
-        android:textSize="20dp" />
+        android:textSize="12dp" />
 
 </RelativeLayout>

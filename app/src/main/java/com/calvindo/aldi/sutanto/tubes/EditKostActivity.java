@@ -26,6 +26,7 @@ public class EditKostActivity extends AppCompatActivity {
     String snama,salamat,sharga,slongitude,slatitude,sgambar, sid;
     ImageButton back;
     MaterialButton btnSave,btnCancel;
+    LoadingDialog loadingDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,8 @@ public class EditKostActivity extends AppCompatActivity {
         btnCancel = findViewById(R.id.btnCancel);
         btnSave = findViewById(R.id.btnSave);
 
+        loadingDialog = new LoadingDialog(EditKostActivity.this);
+
         back = findViewById(R.id.back);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +84,7 @@ public class EditKostActivity extends AppCompatActivity {
     }
 
     public void updateData(){
+        loadingDialog.startLoadingDialog();
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<KostResponse> call = apiInterface.updateKost(
                 sid,
@@ -95,7 +99,9 @@ public class EditKostActivity extends AppCompatActivity {
         call.enqueue(new Callback<KostResponse>() {
             @Override
             public void onResponse(Call<KostResponse> call, Response<KostResponse> response) {
-                Toast.makeText(EditKostActivity.this,"" + response.code(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(EditKostActivity.this,"" + response.code(), Toast.LENGTH_SHORT).show();
+                loadingDialog.dismissDialog();
+                onBackPressed();
             }
 
             @Override

@@ -44,6 +44,10 @@ public interface ApiInterface {
     @DELETE("kost/{id}")
     Call<KostResponse> deleteKost(@Path("id")String id);
 
+    @GET("transaksi")
+    Call<TransaksiResponse> getTransaksi();
+
+
     @GET("transaksi/{id}")
     Call<TransaksiResponse> getAllTransaksi(@Path("id")String uid);
 

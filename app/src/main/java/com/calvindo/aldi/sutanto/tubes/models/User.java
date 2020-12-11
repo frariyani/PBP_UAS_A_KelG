@@ -41,13 +41,13 @@ public class User extends BaseObservable {
         this.avatar = avatar;
     }
 
-    @BindingAdapter("bind:src")
-    public static void loadImage(ImageView imageView, String imageURL){
-        Glide.with(imageView.getContext())
-                .setDefaultRequestOptions(new RequestOptions())
-                .load(imageURL)
-                .into(imageView);
-    }
+//    @BindingAdapter("bind:src")
+//    public static void loadImage(ImageView imageView, String imageURL){
+//        Glide.with(imageView.getContext())
+//                .setDefaultRequestOptions(new RequestOptions())
+//                .load(imageURL)
+//                .into(imageView);
+//    }
 
 
     public String getNama() {

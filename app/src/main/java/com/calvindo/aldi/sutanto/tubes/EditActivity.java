@@ -41,7 +41,7 @@ public class EditActivity extends AppCompatActivity {
 
     //init layout component
     private TextInputEditText editEmail, editPassword, editNama, editUsername, editNoTelp, editAlamat;
-    private MaterialButton btnSave;
+    private MaterialButton btnSave, btnCancel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class EditActivity extends AppCompatActivity {
         editNoTelp = findViewById(R.id.input_notelp);
         editAlamat = findViewById(R.id.input_alamat);
         editPassword = findViewById(R.id.input_password);
+        btnCancel = findViewById(R.id.cancel_btn);
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
@@ -73,6 +74,12 @@ public class EditActivity extends AppCompatActivity {
                         editUsername.getText().toString(),editNoTelp.getText().toString(),
                         editAlamat.getText().toString(),editPassword.getText().toString());
 
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }
@@ -96,6 +103,7 @@ public class EditActivity extends AppCompatActivity {
                             if (task.isSuccessful()){
                                 Toast.makeText(EditActivity.this,"User Profile Updated!", Toast.LENGTH_SHORT).show();
                                 Toast.makeText(EditActivity.this, "" + auth.getCurrentUser().isEmailVerified() + "", Toast.LENGTH_SHORT).show();
+                                onBackPressed();
                             }
                         }
                     });

@@ -27,6 +27,7 @@ public class TambahKostActivity extends AppCompatActivity {
     private ImageButton back;
     private MaterialButton btnCreate;
     private TextInputEditText etNama,etHarga,etLongitude, etLatitude, etLokasi, etURLGambar;
+    private LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,8 @@ public class TambahKostActivity extends AppCompatActivity {
         etLokasi = findViewById(R.id.etLokasi);
         etURLGambar = findViewById(R.id.etURLGambar);
         btnCreate = findViewById(R.id.btnSave);
+
+        loadingDialog = new LoadingDialog(TambahKostActivity.this);
 
 
 
@@ -81,6 +84,7 @@ public class TambahKostActivity extends AppCompatActivity {
     }
 
     public void saveUser(){
+        loadingDialog.startLoadingDialog();
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<KostResponse> add = apiInterface.createKost(
                 etNama.getText().toString(),
@@ -94,8 +98,9 @@ public class TambahKostActivity extends AppCompatActivity {
         add.enqueue(new Callback<KostResponse>() {
             @Override
             public void onResponse(Call<KostResponse> call, Response<KostResponse> response) {
-                Toast.makeText(TambahKostActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(TambahKostActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                 Log.i("Quda : ", "Masuk RESPONSE ," + response.code());
+                loadingDialog.dismissDialog();
                 onBackPressed();
             }
 

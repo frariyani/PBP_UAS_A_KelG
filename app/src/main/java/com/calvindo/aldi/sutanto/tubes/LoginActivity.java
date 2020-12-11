@@ -43,22 +43,22 @@ public class LoginActivity extends AppCompatActivity {
         //init material button
         loginButton = findViewById(R.id.login_button);
         //init register link
-//        registerLink = findViewById(R.id.register_link);
+        registerLink = findViewById(R.id.register_link);
 
         //init firebase authentication
         auth = FirebaseAuth.getInstance();
 
         //editPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-        //dari login ke register
-//        registerLink.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
-//                startActivity(i);
-//                finish();
-//            }
-//        });
+//        dari login ke register
+        registerLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

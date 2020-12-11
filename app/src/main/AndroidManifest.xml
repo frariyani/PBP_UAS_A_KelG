@@ -15,8 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:configChanges="orientation|screenSize|keyboardHidden"
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:theme="@style/AppTheme">
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,24 +24,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<!--        <activity android:name=".UnitTest.LoginActivity" ></activity>-->
+        <activity android:name=".LoginActivity" ></activity>
         <activity android:name=".RegisterActivity" ></activity>
         <activity android:name=".MainActivity" ></activity>
         <activity android:name=".KostOnMAP" ></activity>
+        <activity android:name=".DashboardActivity" ></activity>
+        <activity android:name=".ListKostActivity"></activity>
         <activity android:name=".EditActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".DashboardActivity" />
-        <activity android:name=".ListTransaksiActivity" />
+        <activity android:name=".EditKostActivity"/>
+        <activity android:name=".ListTransaksiActivity"/>
+        <activity android:name=".ListUserActivity"/>
         <activity android:name=".TambahKostActivity"/>
-        <activity android:name=".ListKostActivity" />
-        <activity android:name=".ListUserActivity" />
-        <activity android:name=".EditKostActivity" />
 
         <service android:name=".MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
+        <provider
+            android:name=".GenericFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
 
 </manifest>

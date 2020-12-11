@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -17,7 +18,7 @@
                 <View
                     android:id="@+id/top_view"
                     android:layout_width="wrap_content"
-                    android:layout_height="100dp"
+                    android:layout_height="150dp"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary" />
 
@@ -28,129 +29,145 @@
                     android:layout_below="@+id/top_view"
                     android:layout_weight="1"
                     android:background="@drawable/ic_wave" />
-                <LinearLayout
-                    android:layout_marginTop="180dp"
-                    android:layout_marginStart="50px"
-                    android:layout_marginEnd="50px"
-                    android:orientation="vertical"
+
+                <androidx.cardview.widget.CardView
+                    android:layout_below="@id/textView1"
+                    app:cardElevation="10dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="#fff"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_email"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_email"
-                            android:inputType="text"
-                            android:hint="Email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_username"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_username"
-                            android:inputType="text"
-                            android:hint="Username"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_nama"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_nama"
-                            android:inputType="text"
-                            android:hint="Nama Lengkap"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_alamat"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_alamat"
-                            android:inputType="text"
-                            android:hint="Alamat"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_notelp"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_notelp"
-                            android:inputType="text"
-                            android:hint="Nomor Telpon"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/layout_password"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_password"
-                            android:hint="Password"
-                            android:inputType="textPassword"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content">
                     <LinearLayout
+                        android:padding="10dp"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/save_button"
-                            android:text="Save"
-                            android:textColor="@android:color/white"
-                            android:layout_weight="0.8"
-                            android:layout_marginEnd="8dp"
-                            android:backgroundTint="#2196F3"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_email"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/cancel_btn"
-                            android:text="Cancel"
-                            android:textColor="@android:color/black"
-                            android:layout_weight="0.8"
-                            android:layout_marginEnd="8dp"
-                            android:backgroundTint="#eee"
+                            android:layout_marginBottom="10dp"
+                            android:layout_height="wrap_content">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_email"
+                                android:inputType="text"
+                                android:hint="Email"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_username"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_marginBottom="10dp"
+                            android:layout_height="wrap_content">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_username"
+                                android:inputType="text"
+                                android:hint="Username"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_nama"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:layout_height="wrap_content">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_nama"
+                                android:inputType="text"
+                                android:hint="Nama Lengkap"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_alamat"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:layout_height="wrap_content">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_alamat"
+                                android:inputType="text"
+                                android:hint="Alamat"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_notelp"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:layout_height="wrap_content">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_notelp"
+                                android:inputType="text"
+                                android:hint="Nomor Telpon"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/layout_password"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:layout_height="wrap_content">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/input_password"
+                                android:hint="Password"
+                                android:inputType="textPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/save_button"
+                                android:text="Save"
+                                android:textColor="@android:color/white"
+                                android:layout_weight="0.8"
+                                android:layout_marginEnd="8dp"
+                                android:backgroundTint="#2196F3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/cancel_btn"
+                                android:text="Cancel"
+                                android:textColor="@android:color/black"
+                                android:layout_weight="0.8"
+                                android:layout_marginEnd="8dp"
+                                android:backgroundTint="#eee"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="244dp"
-                    android:layout_height="86dp"
+                    android:layout_height="50dp"
                     android:fontFamily="sans-serif-black"
                     android:text="GMBKost"
                     android:textColor="#fff"
-                    android:textSize="40dp"
+                    android:textSize="20dp"
                     android:layout_marginTop="30sp"
                     android:layout_marginLeft="30sp"/>
 
@@ -159,11 +176,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30sp"
-                    android:layout_marginTop="80dp"
+                    android:layout_marginTop="55dp"
                     android:fontFamily="sans-serif-condensed"
                     android:text="Gahar Mantap Bauwangi"
                     android:textColor="#fff"
-                    android:textSize="20dp" />
+                    android:textSize="12dp" />
+
+
+
+
             </RelativeLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

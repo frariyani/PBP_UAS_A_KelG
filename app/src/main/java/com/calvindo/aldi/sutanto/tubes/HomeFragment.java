@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.calvindo.aldi.sutanto.tubes.API.ApiClient;
@@ -51,10 +53,12 @@ public class HomeFragment extends Fragment {
     private List<Kost> ListKost;
     private RecyclerView myRecyclerView;
     private RecyclerViewAdapter adapter;
+    private SwipeRefreshLayout refreshLayout;
     FragmentHomeBinding fragmentHomeBinding;
     private Button button_map;
     private SharedPreferences preferences;
     public static final int mode = Activity.MODE_PRIVATE;
+    private ProgressBar progressBar;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -119,6 +123,18 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         FragmentHomeBinding fragmentHomeBinding = FragmentHomeBinding.inflate(getLayoutInflater());
         myRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_kost);
+        refreshLayout = v.findViewById(R.id.refresh);
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getKost();
+                refreshLayout.setRefreshing(false);
+            }
+        });
+
+        progressBar = v.findViewById(R.id.progressBar);
+
 
         getKost();
         return v;
@@ -134,6 +150,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void getKost(){
+        progressBar.setVisibility(View.VISIBLE);
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
         Call<KostResponse> call = apiService.getAllKost();
 
@@ -141,6 +158,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<KostResponse> call, Response<KostResponse> response) {
                 generateList(response.body().getKost());
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override

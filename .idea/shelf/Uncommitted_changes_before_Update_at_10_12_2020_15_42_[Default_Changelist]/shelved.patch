@@ -1,0 +1,58 @@
+Index: app/src/main/res/layout/dialog_booking.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.cardview.widget.CardView\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:padding=\"8dp\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\">\r\n        <RelativeLayout\r\n            android:layout_marginTop=\"10dp\"\r\n            android:layout_marginHorizontal=\"20dp\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\">\r\n            <TextView\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_alignParentLeft=\"true\"\r\n                android:textSize=\"18dp\"\r\n                android:textStyle=\"bold\"\r\n                android:text=\"Nama Kost\"\r\n                android:textColor=\"@android:color/black\"/>\r\n            <TextView\r\n                android:id=\"@+id/twNamaKost\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_alignParentEnd=\"true\"\r\n                android:layout_alignParentRight=\"true\"\r\n                android:layout_marginEnd=\"5dp\"\r\n                android:hint=\"Nama Kost\"\r\n                android:textAlignment=\"textEnd\"\r\n                android:textColor=\"@android:color/black\"\r\n                android:textSize=\"18dp\"/>\r\n        </RelativeLayout>\r\n\r\n        <com.google.android.material.textfield.TextInputLayout\r\n            android:id=\"@+id/inputlayout\"\r\n            style=\"@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_margin=\"10dp\"\r\n            android:hint=\"Lama Sewa\">\r\n\r\n            <AutoCompleteTextView\r\n                android:id=\"@+id/edLamaSewa\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"/>\r\n\r\n        </com.google.android.material.textfield.TextInputLayout>\r\n\r\n\r\n        <com.google.android.material.button.MaterialButton\r\n            android:id=\"@+id/btnBooking\"\r\n            android:text=\"Booking\"\r\n            android:textColor=\"@android:color/white\"\r\n            android:layout_weight=\"0.8\"\r\n            android:layout_marginTop=\"10dp\"\r\n            android:layout_marginEnd=\"8dp\"\r\n            android:backgroundTint=\"#2196F3\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"/>\r\n\r\n        </LinearLayout>\r\n</androidx.cardview.widget.CardView>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/dialog_booking.xml	(revision 863049034c4efe04bfd55ee9cb81dd1c25009b03)
++++ app/src/main/res/layout/dialog_booking.xml	(date 1607589718888)
+@@ -62,5 +62,5 @@
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"/>
+ 
+-        </LinearLayout>
++    </LinearLayout>
+ </androidx.cardview.widget.CardView>
+\ No newline at end of file
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    package=\"com.calvindo.aldi.sutanto.tubes\">\r\n\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n\r\n    <application\r\n        android:allowBackup=\"true\"\r\n        android:icon=\"@drawable/ic_gmbkost_icon\"\r\n        android:label=\"@string/app_name\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:configChanges=\"orientation|screenSize|keyboardHidden\"\r\n        android:theme=\"@style/AppTheme\"\r\n        android:usesCleartextTraffic=\"true\">\r\n        <activity android:name=\".SplashScreenActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n<!--        <activity android:name=\".UnitTest.LoginActivity\" ></activity>-->\r\n        <activity android:name=\".RegisterActivity\" ></activity>\r\n        <activity android:name=\".MainActivity\" ></activity>\r\n        <activity android:name=\".KostOnMAP\" ></activity>\r\n        <activity android:name=\".EditActivity\" />\r\n        <activity android:name=\".LoginActivity\" />\r\n        <activity android:name=\".DashboardActivity\" />\r\n        <activity android:name=\".ListTransaksiActivity\" />\r\n        <activity android:name=\".TambahKostActivity\"/>\r\n        <activity android:name=\".ListKostActivity\" />\r\n        <activity android:name=\".ListUserActivity\" />\r\n        <activity android:name=\".EditKostActivity\" />\r\n\r\n        <service android:name=\".MessagingService\">\r\n            <intent-filter>\r\n                <action android:name=\"com.google.firebase.MESSAGING_EVENT\"/>\r\n            </intent-filter>\r\n        </service>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 863049034c4efe04bfd55ee9cb81dd1c25009b03)
++++ app/src/main/AndroidManifest.xml	(date 1607282422010)
+@@ -15,8 +15,7 @@
+         android:roundIcon="@mipmap/ic_launcher_round"
+         android:supportsRtl="true"
+         android:configChanges="orientation|screenSize|keyboardHidden"
+-        android:theme="@style/AppTheme"
+-        android:usesCleartextTraffic="true">
++        android:theme="@style/AppTheme">
+         <activity android:name=".SplashScreenActivity">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+@@ -24,18 +23,13 @@
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+-<!--        <activity android:name=".UnitTest.LoginActivity" ></activity>-->
++        <activity android:name=".LoginActivity" ></activity>
+         <activity android:name=".RegisterActivity" ></activity>
+         <activity android:name=".MainActivity" ></activity>
+         <activity android:name=".KostOnMAP" ></activity>
++        <activity android:name=".DashboardActivity" ></activity>
++        <activity android:name=".ListKostActivity"></activity>
+         <activity android:name=".EditActivity" />
+-        <activity android:name=".LoginActivity" />
+-        <activity android:name=".DashboardActivity" />
+-        <activity android:name=".ListTransaksiActivity" />
+-        <activity android:name=".TambahKostActivity"/>
+-        <activity android:name=".ListKostActivity" />
+-        <activity android:name=".ListUserActivity" />
+-        <activity android:name=".EditKostActivity" />
+ 
+         <service android:name=".MessagingService">
+             <intent-filter>
